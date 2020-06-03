@@ -2,12 +2,10 @@ package io.mustelidae.grantotter.common
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped
 import io.swagger.annotations.ApiModel
-import javax.xml.bind.annotation.XmlAnyElement
 
 @ApiModel("Reply.T")
 open class Reply<T>() {
     @get:JsonUnwrapped
-    @get:XmlAnyElement
     var content: T? = null
 
     constructor(content: T) : this() {

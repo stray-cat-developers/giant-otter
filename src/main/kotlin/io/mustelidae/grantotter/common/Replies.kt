@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonRootName
 import io.swagger.annotations.ApiModel
 import java.util.ArrayList
 import java.util.Collections
-import javax.xml.bind.annotation.XmlAnyElement
-import javax.xml.bind.annotation.XmlElementWrapper
 import org.springframework.util.Assert
 
 @ApiModel("Replies.T")
@@ -28,8 +26,6 @@ constructor(content: Iterable<T>) : Iterable<T> {
         }
     }
 
-    @XmlAnyElement
-    @XmlElementWrapper
     @JsonProperty("content")
     open fun getContent(): Collection<T> {
         return Collections.unmodifiableCollection(content!!)
