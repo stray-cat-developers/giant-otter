@@ -1,0 +1,33 @@
+logging:
+  level:
+    io.mustelidae.grantotter: info
+    org.springframework.boot.actuate: off
+    org.springframework.web: debug
+    org.springframework.boot: info
+    org.springframework.orm.jpa: error
+    org.springframework.transaction: error
+    org.hibernate.SQL: error
+    org.hibernate.tool.schema: error
+    com.zaxxer.hikari: error
+    io.swagger.models.parameters.AbstractSerializableParameter: error
+
+server:
+  error:
+    include-stacktrace: always
+    whitelabel:
+      enabled: false
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+
+spring:
+  main:
+    lazy-initialization: true
+---
+spring:
+  profiles: embedded
+  data:
+    mongodb:
+      host: localhost
+      port: 27019
+      database: grantotter

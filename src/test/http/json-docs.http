@@ -1,0 +1,7 @@
+GET {{host}}/v2/api-docs
+Accept: application/json
+
+###
+
+GET {{host}}/swagger/specifications/5ed5ea6704f5bd43261e6f14/docket
+Content-Type: application/json
