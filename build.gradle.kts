@@ -88,6 +88,10 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+tasks.register("version") {
+    println(version)
+}
+
 dockerCompose {
 // docker-compose
     // settings as usual
