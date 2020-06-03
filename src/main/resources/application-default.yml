@@ -19,7 +19,7 @@ server:
   compression:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain
-  port: 7300
+  port: 6200
 
 spring:
   data:
