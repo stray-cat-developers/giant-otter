@@ -3,7 +3,6 @@ package io.mustelidae.grantotter.common
 import com.fasterxml.jackson.annotation.JsonUnwrapped
 import io.swagger.annotations.ApiModel
 
-@ApiModel("Reply.T")
 open class Reply<T>() {
     @get:JsonUnwrapped
     var content: T? = null

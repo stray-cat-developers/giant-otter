@@ -7,7 +7,6 @@ import java.util.ArrayList
 import java.util.Collections
 import org.springframework.util.Assert
 
-@ApiModel("Replies.T")
 @JsonRootName(value = "entities")
 open class Replies<T>
 constructor(content: Iterable<T>) : Iterable<T> {
