@@ -19,7 +19,7 @@ class DocketController {
 
     private val log = LoggerFactory.getLogger(this::class.java)
 
-    @GetMapping("{id}/docket", produces = ["text/plain"])
+    @GetMapping("{id}/docket", produces = ["text/plain;charset=UTF-8"])
     fun findOne(@PathVariable id: String): String? {
         return SwaggerDocCacheStore.findOne(ObjectId(id))?.second
     }
