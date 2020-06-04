@@ -2,7 +2,6 @@ package io.mustelidae.grantotter.common
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
-import io.swagger.annotations.ApiModel
 import java.util.ArrayList
 import java.util.Collections
 import org.springframework.util.Assert

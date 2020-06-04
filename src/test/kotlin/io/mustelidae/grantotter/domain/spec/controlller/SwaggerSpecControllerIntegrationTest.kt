@@ -6,6 +6,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.mustelidae.grantotter.config.IntegrationSupport
 import io.mustelidae.grantotter.domain.ResourceFixture
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -39,5 +40,16 @@ internal class SwaggerSpecControllerIntegrationTest : IntegrationSupport() {
         val specs = swaggerSpecController.findAll().getContent()
 
         specs.size shouldBeGreaterThanOrEqual 1
+    }
+
+    @Test
+    fun addFail() {
+        // Given
+        val request = ResourceFixture.aSwaggerSpecInvalidRequest()
+
+        // When
+        Assertions.assertThrows(IllegalArgumentException::class.java) {
+            swaggerSpecController.add(request)
+        }
     }
 }

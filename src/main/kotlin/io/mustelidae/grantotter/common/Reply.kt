@@ -1,7 +1,6 @@
 package io.mustelidae.grantotter.common
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped
-import io.swagger.annotations.ApiModel
 
 open class Reply<T>() {
     @get:JsonUnwrapped

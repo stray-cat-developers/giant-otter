@@ -16,4 +16,17 @@ object ResourceFixture {
             listOf("Platform")
         )
     }
+
+    fun aSwaggerSpecInvalidRequest(): SwaggerSpecResources.Request {
+        return SwaggerSpecResources.Request(
+            SwaggerSpec.Type.JSON,
+            "TEST",
+            "Grantotter",
+            "http://localhost/v2/api",
+            "2.0",
+            "Grantotter Swagger Json Specification",
+            mapOf("x-authentication" to "test"),
+            listOf("Platform")
+        )
+    }
 }
