@@ -28,7 +28,6 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
-    runtimeOnly("com.h2database:h2")
     implementation("com.github.kittinunf.fuel:fuel:2.2.1")
 
     testImplementation("cz.jirutka.spring:embedmongo-spring:1.3.1")
