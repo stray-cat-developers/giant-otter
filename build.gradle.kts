@@ -24,8 +24,6 @@ repositories {
 }
 
 dependencies {
-    implementation("au.com.console:kotlin-jpa-specification-dsl:2.0.0-rc.1")
-
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
