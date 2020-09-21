@@ -1,7 +1,17 @@
 package io.mustelidae.grantotter.config
 
-import cz.jirutka.spring.embedmongo.EmbeddedMongoFactoryBean
+import com.mongodb.MongoClient
+import de.flapdoodle.embed.mongo.MongodExecutable
+import de.flapdoodle.embed.mongo.MongodProcess
+import de.flapdoodle.embed.mongo.MongodStarter
+import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
+import de.flapdoodle.embed.mongo.config.Net
+import de.flapdoodle.embed.mongo.distribution.Version
+import de.flapdoodle.embed.process.runtime.Network
 import java.io.IOException
+import javax.annotation.PostConstruct
+import javax.annotation.PreDestroy
+import kotlin.random.Random
 import org.springframework.boot.autoconfigure.mongo.MongoProperties
 import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -19,15 +29,33 @@ class DefaultEmbeddedMongo(
     private val mongoProperties: MongoProperties
 ) {
 
+    lateinit var mongoExecutable: MongodExecutable
+    lateinit var mongoProcess: MongodProcess
+    private val starter = MongodStarter.getDefaultInstance()
+    var port: Int = Random.nextInt(27000, 27999)
+
+    @PostConstruct
+    fun startup() {
+        val builder = MongodConfigBuilder()
+            .version(Version.Main.PRODUCTION)
+            .net(Net(mongoProperties.host, port, Network.localhostIsIPv6()))
+            .build()
+        this.mongoExecutable = starter.prepare(builder)
+        this.mongoProcess = this.mongoExecutable.start()
+    }
+
     @Bean
     @Throws(IOException::class)
     fun mongoTemplate(): MongoTemplate {
-        val mongo = EmbeddedMongoFactoryBean()
-        mongo.setBindIp(mongoProperties.host)
-        mongo.setPort(mongoProperties.port)
+        val mongoClient = MongoClient(mongoProperties.host, port)
 
-        val mongoClient = mongo.`object`!!
         @Suppress("DEPRECATION")
         return MongoTemplate(mongoClient, mongoProperties.database)
+    }
+
+    @PreDestroy
+    fun shutdown() {
+        mongoProcess.stop()
+        mongoExecutable.stop()
     }
 }

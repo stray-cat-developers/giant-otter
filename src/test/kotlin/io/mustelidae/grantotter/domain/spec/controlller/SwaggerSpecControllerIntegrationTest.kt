@@ -31,7 +31,7 @@ internal class SwaggerSpecControllerIntegrationTest : IntegrationSupport() {
         spec shouldNotBe null
         spec!!.asClue {
             it.id shouldBe id
-            it.name shouldBe request.name
+            it.name shouldBe "[${request.category}] ${request.name}"
             it.type shouldBe request.type
             it.description shouldBe request.description
             it.url shouldBe request.url

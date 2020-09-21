@@ -29,5 +29,4 @@ spring:
   data:
     mongodb:
       host: localhost
-      port: 27019
       database: grantotter
