@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class GrantotterApplication
+class GrantOtterApplication
 
 fun main(args: Array<String>) {
-    runApplication<GrantotterApplication>(*args)
+    runApplication<GrantOtterApplication>(*args)
 }
