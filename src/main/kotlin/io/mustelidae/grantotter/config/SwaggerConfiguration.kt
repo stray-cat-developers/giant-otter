@@ -33,7 +33,7 @@ class SwaggerConfiguration {
         return SwaggerResourcesProvider {
             val resources = ArrayList(defaultResourcesProvider.get())
             resources.clear()
-            resources.addAll(SwaggerDocCacheStore.findAll().map { it.first })
+            resources.addAll(SwaggerDocCacheStore.findAll().map { it.first }.sortedBy { it.name })
             resources
         }
     }
