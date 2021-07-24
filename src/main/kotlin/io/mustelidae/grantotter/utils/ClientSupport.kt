@@ -3,6 +3,7 @@ package io.mustelidae.grantotter.utils
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.kittinunf.fuel.core.FuelError
+import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.core.ResponseResultOf
 import com.github.kittinunf.result.Result
@@ -69,5 +70,11 @@ open class ClientSupport(
     internal inline fun <reified T> Result<String, FuelError>.fromJson(): T {
         return this.component1()!!
             .fromJson()
+    }
+
+    companion object {
+        init {
+            FuelManager.instance.forceMethods = true
+        }
     }
 }

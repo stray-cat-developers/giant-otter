@@ -6,9 +6,9 @@ plugins {
     id("org.springframework.boot") version "2.2.6.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
     id("com.avast.gradle.docker-compose") version "0.10.10"
-    kotlin("jvm") version "1.3.71"
-    kotlin("plugin.spring") version "1.3.71"
-    kotlin("plugin.allopen") version "1.3.71"
+    kotlin("jvm") version "1.5.21"
+    kotlin("plugin.spring") version "1.5.21"
+    kotlin("plugin.allopen") version "1.5.21"
     id("org.jmailen.kotlinter") version "2.3.2"
 }
 
@@ -28,7 +28,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
-    implementation("com.github.kittinunf.fuel:fuel:2.2.1")
+    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
 
     testImplementation("cz.jirutka.spring:embedmongo-spring:1.3.1")
     testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.2.0")
