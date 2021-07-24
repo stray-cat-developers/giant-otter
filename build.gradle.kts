@@ -6,9 +6,9 @@ plugins {
     id("org.springframework.boot") version "2.2.6.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
     id("com.avast.gradle.docker-compose") version "0.10.10"
-    kotlin("jvm") version "1.3.71"
-    kotlin("plugin.spring") version "1.3.71"
-    kotlin("plugin.allopen") version "1.3.71"
+    kotlin("jvm") version "1.5.21"
+    kotlin("plugin.spring") version "1.5.21"
+    kotlin("plugin.allopen") version "1.5.21"
     id("org.jmailen.kotlinter") version "2.3.2"
 }
 
