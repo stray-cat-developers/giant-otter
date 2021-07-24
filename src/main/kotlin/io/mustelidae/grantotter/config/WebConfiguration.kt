@@ -15,7 +15,9 @@ class WebConfiguration : WebMvcConfigurationSupport() {
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler("/swagger-ui.html")
-            .addResourceLocations("classpath:/META-INF/resources/")
+            .addResourceLocations("classpath:/static/")
+        registry.addResourceHandler("/proxy.js")
+            .addResourceLocations("classpath:/static/")
         registry.addResourceHandler("/webjars/**")
             .addResourceLocations("classpath:/META-INF/resources/webjars/")
     }
