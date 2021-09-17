@@ -2,8 +2,8 @@ package io.mustelidae.grantotter.domain.spec.controlller
 
 import io.mustelidae.grantotter.domain.spec.SwaggerSpec
 import io.swagger.annotations.ApiModel
-import java.time.LocalDateTime
 import org.hibernate.validator.constraints.URL
+import java.time.LocalDateTime
 
 class SwaggerSpecResources {
 

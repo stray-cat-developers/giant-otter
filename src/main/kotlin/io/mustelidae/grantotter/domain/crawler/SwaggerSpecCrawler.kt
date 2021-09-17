@@ -19,7 +19,8 @@ class SwaggerSpecCrawler
 ) : ClientSupport(
     Jackson.getMapper(),
     true,
-    LoggerFactory.getLogger(SwaggerSpecCrawler::class.java)) {
+    LoggerFactory.getLogger(SwaggerSpecCrawler::class.java)
+) {
 
     fun crawling(swaggerSpec: SwaggerSpec) {
         val headers: MutableMap<String, Any> = mutableMapOf("Content-Type" to "application/json")

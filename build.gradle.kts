@@ -9,7 +9,7 @@ plugins {
     kotlin("jvm") version "1.5.21"
     kotlin("plugin.spring") version "1.5.21"
     kotlin("plugin.allopen") version "1.5.21"
-    id("org.jmailen.kotlinter") version "2.3.2"
+    id("org.jmailen.kotlinter") version "3.6.0"
 }
 
 group = "io.mustelidae"

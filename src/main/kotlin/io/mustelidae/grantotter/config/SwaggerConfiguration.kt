@@ -1,7 +1,6 @@
 package io.mustelidae.grantotter.config
 
 import io.mustelidae.grantotter.domain.crawler.SwaggerDocCacheStore
-import java.util.ArrayList
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Lazy
@@ -13,6 +12,7 @@ import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger.web.InMemorySwaggerResourcesProvider
 import springfox.documentation.swagger.web.SwaggerResourcesProvider
 import springfox.documentation.swagger2.annotations.EnableSwagger2
+import java.util.ArrayList
 
 @EnableSwagger2
 @Configuration
