@@ -15,12 +15,12 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 
 object Jackson {
     private val mapper = Jackson2ObjectMapperBuilder.json()

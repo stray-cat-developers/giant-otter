@@ -3,7 +3,6 @@ package io.mustelidae.grantotter.config
 import io.mustelidae.grantotter.common.Error
 import io.mustelidae.grantotter.common.ErrorCode
 import io.mustelidae.grantotter.common.GError
-import javax.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes
 import org.springframework.http.HttpStatus
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.context.request.ServletWebRequest
+import javax.servlet.http.HttpServletRequest
 
 @ControllerAdvice(annotations = [RestController::class])
 class RestAPIExceptionAdvice {

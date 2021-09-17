@@ -1,9 +1,9 @@
 package io.mustelidae.grantotter.domain.crawler
 
 import io.mustelidae.grantotter.domain.spec.SwaggerSpec
-import java.util.concurrent.ConcurrentHashMap
 import org.bson.types.ObjectId
 import springfox.documentation.swagger.web.SwaggerResource
+import java.util.concurrent.ConcurrentHashMap
 
 object SwaggerDocCacheStore {
     private val cacheStore: ConcurrentHashMap<String, Pair<SwaggerResource, String>> = ConcurrentHashMap()

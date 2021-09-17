@@ -2,9 +2,9 @@ package io.mustelidae.grantotter.common
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
+import org.springframework.util.Assert
 import java.util.ArrayList
 import java.util.Collections
-import org.springframework.util.Assert
 
 @JsonRootName(value = "entities")
 open class Replies<T>

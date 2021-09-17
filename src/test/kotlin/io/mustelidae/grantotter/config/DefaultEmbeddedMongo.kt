@@ -8,10 +8,6 @@ import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
 import de.flapdoodle.embed.mongo.config.Net
 import de.flapdoodle.embed.mongo.distribution.Version
 import de.flapdoodle.embed.process.runtime.Network
-import java.io.IOException
-import javax.annotation.PostConstruct
-import javax.annotation.PreDestroy
-import kotlin.random.Random
 import org.springframework.boot.autoconfigure.mongo.MongoProperties
 import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -20,6 +16,10 @@ import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Lazy
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Component
+import java.io.IOException
+import javax.annotation.PostConstruct
+import javax.annotation.PreDestroy
+import kotlin.random.Random
 
 @Lazy(false)
 @Import(value = [EmbeddedMongoAutoConfiguration::class])
