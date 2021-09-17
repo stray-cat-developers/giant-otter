@@ -1,7 +1,7 @@
 # giant-otter
 This API application collects and shows several swagger apis.
 
-[![Build Status](https://travis-ci.com/fennec-fox/giant-otter.svg?branch=master)](https://travis-ci.com/fennec-fox/giant-otter)
+[![Build Status](https://app.travis-ci.com/fennec-fox/giant-otter.svg?branch=master)](https://app.travis-ci.com/fennec-fox/giant-otter)
 
 # New Features!
 
