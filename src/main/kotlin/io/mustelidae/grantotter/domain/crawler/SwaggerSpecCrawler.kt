@@ -56,7 +56,11 @@ class SwaggerSpecCrawler
         val specs = swaggerSpecFinder.findAll()
 
         for (spec in specs) {
-            this.crawling(spec)
+            try {
+                this.crawling(spec)
+            } catch (e: Exception) {
+                log.error("${spec.name} can't crawing")
+            }
         }
     }
 }
