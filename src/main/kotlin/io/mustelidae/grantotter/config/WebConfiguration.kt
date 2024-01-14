@@ -1,6 +1,11 @@
 package io.mustelidae.grantotter.config
 
 import io.mustelidae.grantotter.utils.Jackson
+import org.springdoc.core.properties.SwaggerUiConfigParameters
+import org.springdoc.core.providers.ActuatorProvider
+import org.springdoc.webmvc.ui.SwaggerIndexTransformer
+import org.springdoc.webmvc.ui.SwaggerResourceResolver
+import org.springdoc.webmvc.ui.SwaggerWebMvcConfigurer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar
@@ -13,11 +18,33 @@ import org.springframework.http.converter.StringHttpMessageConverter
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import java.time.format.DateTimeFormatter
+import java.util.Optional
 
 @Configuration
 @ControllerAdvice
-class WebConfiguration : DelegatingWebMvcConfiguration() {
+class WebConfiguration(
+    private val swaggerUiConfigParameters: SwaggerUiConfigParameters,
+    private val swaggerIndexTransformer: SwaggerIndexTransformer,
+    private val actuatorProvider: Optional<ActuatorProvider>,
+    private val swaggerResourceResolver: SwaggerResourceResolver,
+) : DelegatingWebMvcConfiguration() {
+
+    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
+        val uiRootPath = StringBuilder()
+        val swaggerPath = swaggerUiConfigParameters.path
+        if (swaggerPath.contains("/")) {
+            uiRootPath.append(swaggerPath, 0, swaggerPath.lastIndexOf("/"))
+        }
+
+        registry.addResourceHandler("$uiRootPath/swagger-ui/proxy/**")
+            .addResourceLocations("classpath:/static/proxy/")
+        registry.addResourceHandler("$uiRootPath/swagger-ui/**")
+            .addResourceLocations("classpath:/static/")
+
+        SwaggerWebMvcConfigurer(swaggerUiConfigParameters, swaggerIndexTransformer, actuatorProvider, swaggerResourceResolver).addResourceHandlers(registry)
+    }
 
     override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
         converters.add(ByteArrayHttpMessageConverter())

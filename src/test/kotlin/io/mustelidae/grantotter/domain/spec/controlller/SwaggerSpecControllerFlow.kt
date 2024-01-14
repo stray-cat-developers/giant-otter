@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 class SwaggerSpecControllerFlow(
-    private val mockMvc: MockMvc
+    private val mockMvc: MockMvc,
 ) {
 
     fun findOne(id: String): SwaggerSpecResources.Reply {
@@ -25,7 +25,7 @@ class SwaggerSpecControllerFlow(
             .fromJson<SwaggerSpecResources.Reply>()
     }
 
-    fun add(request: SwaggerSpecResources.Request): String  {
+    fun add(request: SwaggerSpecResources.Request): String {
         val uri = linkTo<SwaggerSpecController> { add(request) }.toUri()
 
         return mockMvc.post(uri) {
@@ -37,5 +37,4 @@ class SwaggerSpecControllerFlow(
             .response
             .contentAsString
     }
-
 }
