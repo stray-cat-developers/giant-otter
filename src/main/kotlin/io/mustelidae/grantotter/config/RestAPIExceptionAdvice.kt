@@ -84,10 +84,4 @@ class RestAPIExceptionAdvice(
 
         return Jackson.getMapper().convertValue(errorAttributes, GlobalErrorFormat::class.java)
     }
-
-    private data class ValidationError(
-        val field: String,
-        val rejectedValue: String,
-        val message: String?,
-    )
 }

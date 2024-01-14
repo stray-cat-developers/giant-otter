@@ -11,8 +11,6 @@ constructor(content: Iterable<T>) : Iterable<T> {
 
     private val content: MutableCollection<T>?
 
-    constructor() : this(ArrayList<T>())
-
     init {
         Assert.notNull(content, "Content must not be null!")
 
