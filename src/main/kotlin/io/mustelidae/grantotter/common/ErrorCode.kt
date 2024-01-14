@@ -9,5 +9,5 @@ enum class ErrorCode(val desc: String) {
     S000("Internal Server Error"),
 
     // Communication error
-    C000("Communication error")
+    C000("Communication error"),
 }

@@ -1,46 +1,58 @@
 package io.mustelidae.grantotter.config
 
 import io.mustelidae.grantotter.domain.crawler.SwaggerDocCacheStore
+import org.springdoc.core.models.GroupedOpenApi
+import org.springdoc.core.properties.AbstractSwaggerUiConfigProperties.SwaggerUrl
+import org.springdoc.core.properties.SwaggerUiConfigProperties
+import org.springdoc.core.utils.SpringDocUtils
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Lazy
 import org.springframework.context.annotation.Primary
-import org.springframework.web.client.RestTemplate
-import springfox.documentation.builders.RequestHandlerSelectors
-import springfox.documentation.spi.DocumentationType
-import springfox.documentation.spring.web.plugins.Docket
-import springfox.documentation.swagger.web.InMemorySwaggerResourcesProvider
-import springfox.documentation.swagger.web.SwaggerResourcesProvider
-import springfox.documentation.swagger2.annotations.EnableSwagger2
-import java.util.ArrayList
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
-@EnableSwagger2
 @Configuration
 class SwaggerConfiguration {
 
-    @Bean
-    fun restTemplate(): RestTemplate {
-        return RestTemplate()
+    init {
+        SpringDocUtils.getConfig().replaceWithSchema(
+            LocalDateTime::class.java,
+            io.swagger.v3.oas.models.media.Schema<LocalDateTime>().apply {
+                example(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
+            },
+        )
+        SpringDocUtils.getConfig().replaceWithSchema(
+            LocalTime::class.java,
+            io.swagger.v3.oas.models.media.Schema<LocalTime>().apply {
+                example(LocalTime.now().format(DateTimeFormatter.ISO_TIME))
+            },
+        )
+        SpringDocUtils.getConfig().replaceWithSchema(
+            LocalDate::class.java,
+            io.swagger.v3.oas.models.media.Schema<LocalDate>().apply {
+                example(LocalDate.now().format(DateTimeFormatter.ISO_DATE))
+            },
+        )
     }
 
     @Primary
     @Bean
     @Lazy
-    fun swaggerResourcesProvider(
-        defaultResourcesProvider: InMemorySwaggerResourcesProvider,
-        temp: RestTemplate
-    ): SwaggerResourcesProvider {
-        return SwaggerResourcesProvider {
-            val resources = ArrayList(defaultResourcesProvider.get())
-            resources.clear()
-            resources.addAll(SwaggerDocCacheStore.findAll().map { it.first }.sortedBy { it.name })
-            resources
-        }
+    fun apis(swaggerUiConfig: SwaggerUiConfigProperties): Set<SwaggerUrl> {
+        val swaggerUrls = mutableSetOf<SwaggerUrl>()
+        swaggerUrls.addAll(SwaggerDocCacheStore.findAll().map { it.first }.sortedBy { it.name })
+        return swaggerUrls
     }
 
     @Bean
-    fun baseDocket(): Docket = Docket(DocumentationType.SWAGGER_2)
-        .select()
-        .apis(RequestHandlerSelectors.basePackage("io.mustelidae.grantotter.domain"))
+    fun default(): GroupedOpenApi = GroupedOpenApi.builder()
+        .group("API")
+        .addOpenApiCustomizer {
+            it.info.version("v1")
+        }
+        .packagesToScan("io.mustelidae.grantotter.domain")
         .build()
 }

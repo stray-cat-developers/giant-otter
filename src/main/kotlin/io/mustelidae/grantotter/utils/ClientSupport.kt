@@ -15,7 +15,7 @@ import org.springframework.http.HttpStatus
 open class ClientSupport(
     val objectMapper: ObjectMapper,
     private val writeLog: Boolean,
-    val log: Logger
+    val log: Logger,
 ) {
     fun ResponseResultOf<String>.orElseThrow(): Result<String, FuelError> {
         writeLog(this)
@@ -46,8 +46,9 @@ open class ClientSupport(
     private fun writeLog(response: ResponseResultOf<String>) {
         val (req, res, result) = response
 
-        if (writeLog && res.isOk())
+        if (writeLog && res.isOk()) {
             log.info("$req\n-----------\n$res")
+        }
 
         if (res.isOk().not()) {
             val msg = StringBuilder("$req\n-----------\n$res")
@@ -59,8 +60,9 @@ open class ClientSupport(
     }
 
     private fun Response.isOk(): Boolean {
-        if (this.statusCode == -1)
+        if (this.statusCode == -1) {
             return false
+        }
 
         return (HttpStatus.valueOf(this.statusCode).is2xxSuccessful)
     }

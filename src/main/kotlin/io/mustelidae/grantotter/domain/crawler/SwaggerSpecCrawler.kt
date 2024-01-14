@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service
 @Service
 class SwaggerSpecCrawler
 @Autowired constructor(
-    private val swaggerSpecFinder: SwaggerSpecFinder
+    private val swaggerSpecFinder: SwaggerSpecFinder,
 ) : ClientSupport(
     Jackson.getMapper(),
     true,
-    LoggerFactory.getLogger(SwaggerSpecCrawler::class.java)
+    LoggerFactory.getLogger(SwaggerSpecCrawler::class.java),
 ) {
 
     fun crawling(swaggerSpec: SwaggerSpec) {

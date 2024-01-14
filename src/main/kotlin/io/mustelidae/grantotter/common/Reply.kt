@@ -1,7 +1,9 @@
 package io.mustelidae.grantotter.common
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped
+import io.swagger.v3.oas.annotations.media.Schema
 
+@Schema(name = "GrantOtter.Reply", description = "Http Json Response Base Format (Class 형태의 리소스를 반환할 때 사용)")
 open class Reply<T>() {
     @get:JsonUnwrapped
     var content: T? = null
@@ -15,7 +17,6 @@ open class Reply<T>() {
     }
 
     override fun equals(other: Any?): Boolean {
-
         if (this === other) {
             return true
         }
@@ -31,7 +32,6 @@ open class Reply<T>() {
     }
 
     override fun hashCode(): Int {
-
         var result = super.hashCode()
         result += if (content == null) 0 else 17 * content!!.hashCode()
         return result

@@ -1,12 +1,11 @@
 package io.mustelidae.grantotter.common
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonRootName
+import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.util.Assert
-import java.util.ArrayList
 import java.util.Collections
 
-@JsonRootName(value = "entities")
+@Schema(name = "GrantOtter.Replies", description = "Http Json Response Base Format (Collection 형태의 리소스를 반환할 때 사용)")
 open class Replies<T>
 constructor(content: Iterable<T>) : Iterable<T> {
 
@@ -38,7 +37,6 @@ constructor(content: Iterable<T>) : Iterable<T> {
     }
 
     override fun equals(other: Any?): Boolean {
-
         if (other === this) {
             return true
         }
@@ -54,7 +52,6 @@ constructor(content: Iterable<T>) : Iterable<T> {
     }
 
     override fun hashCode(): Int {
-
         var result = super.hashCode()
         result += if (content == null) 0 else 17 * content.hashCode()
 
@@ -64,7 +61,6 @@ constructor(content: Iterable<T>) : Iterable<T> {
     @Suppress("UNCHECKED_CAST")
     companion object {
         fun <T : Reply<S>, S> wrap(content: Iterable<S>): Replies<T> {
-
             Assert.notNull(content, "Content must not be null!")
             val resources = ArrayList<T>()
 

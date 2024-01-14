@@ -3,6 +3,7 @@ package io.mustelidae.grantotter.domain.proxy
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Method
 import io.mustelidae.grantotter.utils.Jackson
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -12,25 +13,24 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import springfox.documentation.annotations.ApiIgnore
-import java.lang.Exception
 
-@ApiIgnore
 @RestController
 class ProxyController {
 
+    @Operation(hidden = true)
     @RequestMapping("swagger-proxy")
     fun proxy(
         @RequestParam method: String,
         @RequestParam url: String,
         @RequestHeader headers: MultiValueMap<String, String>,
-        @RequestBody(required = false) body: Map<*, *>?
+        @RequestBody(required = false) body: Map<*, *>?,
     ): ResponseEntity<Any?> {
         val request = Fuel.request(Method.valueOf(method), url)
             .apply {
                 // set request body
-                if (body != null)
+                if (body != null) {
                     this.body(Jackson.getMapper().writeValueAsString(body))
+                }
                 // set request header
                 headers.remove(HttpHeaders.ORIGIN)
                 header(headers)
@@ -50,8 +50,9 @@ class ProxyController {
             } catch (e: Exception) {
                 String(res.body().toByteArray())
             }
-        } else
+        } else {
             null
+        }
 
         // return response
         return ResponseEntity(responseBody, responseHeaders, responseStatus)

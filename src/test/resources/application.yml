@@ -23,9 +23,12 @@ server:
 spring:
   main:
     lazy-initialization: true
+    allow-bean-definition-overriding: true
 ---
 spring:
-  profiles: embedded
+  config:
+    activate:
+      on-profile: embedded
   data:
     mongodb:
       host: localhost

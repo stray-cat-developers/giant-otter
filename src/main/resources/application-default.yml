@@ -22,3 +22,8 @@ spring:
     mongodb:
       uri: mongodb://localhost:27018
       database: grantotter
+springdoc:
+  show-actuator: false
+  swagger-ui:
+    enabled: true
+    tagsSorter: alpha

@@ -1,4 +1,4 @@
-GET {{host}}/v2/api-docs
+GET {{host}}/v3/api-docs
 Accept: application/json
 
 ###

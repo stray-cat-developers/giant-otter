@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 class SwaggerSpecManager
 @Autowired constructor(
     private val swaggerSpecRepository: SwaggerSpecRepository,
-    private val swaggerSpecFinder: SwaggerSpecFinder
+    private val swaggerSpecFinder: SwaggerSpecFinder,
 ) {
 
     fun add(swaggerSpec: SwaggerSpec): ObjectId {
@@ -36,7 +36,8 @@ class SwaggerSpecManager
             .second
             .statusCode
 
-        if (HttpStatus.valueOf(result).is2xxSuccessful.not())
-            throw IllegalArgumentException("invalid url. cause by http status is $result")
+        if (HttpStatus.valueOf(result).is2xxSuccessful.not()) {
+            throw IllegalArgumentException("invalid url(${swaggerSpec.url}). cause by http status is $result")
+        }
     }
 }

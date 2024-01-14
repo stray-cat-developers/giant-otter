@@ -1,52 +1,47 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    java
-    idea
-    id("org.springframework.boot") version "2.2.6.RELEASE"
-    id("io.spring.dependency-management") version "1.0.9.RELEASE"
-    id("com.avast.gradle.docker-compose") version "0.10.10"
-    kotlin("jvm") version "1.5.21"
-    kotlin("plugin.spring") version "1.5.21"
-    kotlin("plugin.allopen") version "1.5.21"
-    id("org.jmailen.kotlinter") version "3.6.0"
+    id("org.springframework.boot") version "3.1.5"
+    id("io.spring.dependency-management") version "1.1.3"
+    id("com.avast.gradle.docker-compose") version "0.17.6"
+    id("org.jmailen.kotlinter") version "3.14.0"
+    kotlin("jvm") version "1.9.21"
+    kotlin("plugin.spring") version "1.9.21"
+    kotlin("plugin.allopen") version "1.9.21"
 }
 
 group = "io.mustelidae"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenLocal()
-    jcenter()
-    maven("https://palantir.bintray.com/releases/")
     mavenCentral()
 }
 
-ext["log4j2.version"] = "2.17.0"
+ext["log4j2.version"] = "2.17.1"
 
 dependencies {
+    implementation(kotlin("stdlib:1.9.21"))
+    implementation(kotlin("reflect:1.9.21"))
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
-    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
 
-    testImplementation("cz.jirutka.spring:embedmongo-spring:1.3.1")
-    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.2.0")
+    implementation("com.github.kittinunf.fuel:fuel:2.3.1") // library deprecated.
+
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.9.0")
 
     testImplementation("io.mockk:mockk:1.9.3")
-    implementation("io.springfox:springfox-swagger2:2.9.2")
-    implementation("io.springfox:springfox-swagger-ui:2.9.2")
-    implementation("io.springfox:springfox-bean-validators:2.9.2")
-    testImplementation("io.mockk:mockk:1.9.3")
-    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
-
-    implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:5.6.2")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-web") {
         exclude(module = "spring-boot-starter-tomcat")
@@ -58,6 +53,7 @@ dependencies {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
         exclude(group = "junit", module = "junit")
     }
+    testImplementation("org.springframework.boot:spring-boot-starter-hateoas:3.1.5")
 }
 
 tasks.withType<Test> {
@@ -83,7 +79,7 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "1.8"
+        jvmTarget = "21"
     }
 }
 

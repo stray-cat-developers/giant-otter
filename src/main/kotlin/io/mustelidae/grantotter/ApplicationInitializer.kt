@@ -12,20 +12,19 @@ import org.springframework.context.annotation.Profile
 @Configuration
 class ApplicationInitializer(
     private val swaggerSpecManager: SwaggerSpecManager,
-    private val crawler: SwaggerSpecCrawler
+    private val crawler: SwaggerSpecCrawler,
 ) : CommandLineRunner {
 
     @Value("\${server.port}")
     private var port: Int = 0
 
     override fun run(vararg args: String?) {
-
         val spec = SwaggerSpec(
             SwaggerSpec.Type.JSON,
             "[CONSOLE] GrantOtter",
-            "http://localhost:$port/v2/api-docs",
-            "2.0",
-            "Grant otter manage api"
+            "http://localhost:$port/v3/api-docs",
+            "3.0",
+            "Grant otter manage api",
         )
         swaggerSpecManager.add(spec)
         crawler.flushAndCrawlingAll()
