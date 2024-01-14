@@ -29,17 +29,6 @@ open class ClientSupport(
         return result
     }
 
-    internal open fun ResponseResultOf<String>.orElseNull(): Result<String, FuelError>? {
-        writeLog(this)
-        val (_, res, result) = this
-
-        if (res.isOk().not()) {
-            return null
-        }
-
-        return result
-    }
-
     /**
      * writeLog 상태에 따라 평소에 Request Response 로그를 남길지 말지 결정한다.
      */
@@ -68,11 +57,6 @@ open class ClientSupport(
     }
 
     internal inline fun <reified T> String.fromJson(): T = objectMapper.readValue(this)
-
-    internal inline fun <reified T> Result<String, FuelError>.fromJson(): T {
-        return this.component1()!!
-            .fromJson()
-    }
 
     companion object {
         init {

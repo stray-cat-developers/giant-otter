@@ -55,18 +55,4 @@ constructor(content: Iterable<T>) : Iterable<T> {
 
         return result
     }
-
-    @Suppress("UNCHECKED_CAST")
-    companion object {
-        fun <T : Reply<S>, S> wrap(content: Iterable<S>): Replies<T> {
-            Assert.notNull(content, "Content must not be null!")
-            val resources = ArrayList<T>()
-
-            for (element in content) {
-                resources.add(Reply(element) as T)
-            }
-
-            return Replies(resources)
-        }
-    }
 }
