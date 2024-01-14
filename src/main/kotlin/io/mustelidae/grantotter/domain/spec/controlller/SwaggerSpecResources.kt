@@ -7,10 +7,10 @@ import java.time.LocalDateTime
 
 class SwaggerSpecResources {
 
-    @Schema(name = "SwaggerSpec.Request")
+    @Schema(name = "GrantOtter.SwaggerSpec.Request")
     class Request(
         val type: SwaggerSpec.Type,
-        val category: String,
+        val group: String,
         val name: String,
         @field:URL
         val url: String,
@@ -20,7 +20,7 @@ class SwaggerSpecResources {
         val tags: List<String>? = null,
     )
 
-    @Schema(name = "SwaggerSpec.Reply")
+    @Schema(name = "GrantOtter.SwaggerSpec.Reply")
     data class Reply(
         val id: String,
         val createdAt: LocalDateTime,

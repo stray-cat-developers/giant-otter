@@ -49,7 +49,7 @@ class SwaggerSpecController
     @ResponseStatus(HttpStatus.CREATED)
     fun add(@Valid request: SwaggerSpecResources.Request): Reply<String> {
         val spec = request.run {
-            SwaggerSpec(type, "[$category] $name", url, version, description, headers, tags)
+            SwaggerSpec(type, "[$group] $name", url, version, description, headers, tags)
         }
 
         val id = swaggerSpecManager.add(spec)
