@@ -6,6 +6,7 @@ logging:
     org.springframework.boot: info
     io.swagger.models.parameters.AbstractSerializableParameter: error
     org.mongodb.driver: info
+    io.mustelidae.grantotter.config.RequestResponseLogFilter: debug
 
 server:
   error:

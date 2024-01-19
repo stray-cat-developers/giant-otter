@@ -8,7 +8,6 @@ import io.mustelidae.grantotter.domain.spec.SwaggerSpecManager
 import io.mustelidae.grantotter.utils.toReplies
 import io.mustelidae.grantotter.utils.toReply
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.validation.Valid
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -47,7 +46,7 @@ class SwaggerSpecController
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun add(@Valid request: SwaggerSpecResources.Request): Reply<String> {
+    fun add(request: SwaggerSpecResources.Request): Reply<String> {
         val spec = request.run {
             SwaggerSpec(type, "[$group] $name", url, version, description, headers, tags)
         }

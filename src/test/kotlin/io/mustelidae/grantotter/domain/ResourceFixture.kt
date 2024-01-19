@@ -10,7 +10,7 @@ object ResourceFixture {
             "TEST",
             "Grantotter",
             "http://localhost:$port/v3/api-docs",
-            "2.0",
+            "3.0.1",
             "Grantotter Swagger Json Specification",
             mapOf("x-authentication" to "test"),
             listOf("Platform"),

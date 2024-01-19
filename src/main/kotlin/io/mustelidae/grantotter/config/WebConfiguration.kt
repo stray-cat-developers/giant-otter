@@ -6,6 +6,7 @@ import org.springdoc.core.providers.ActuatorProvider
 import org.springdoc.webmvc.ui.SwaggerIndexTransformer
 import org.springdoc.webmvc.ui.SwaggerResourceResolver
 import org.springdoc.webmvc.ui.SwaggerWebMvcConfigurer
+import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar
@@ -31,19 +32,11 @@ class WebConfiguration(
     private val swaggerResourceResolver: SwaggerResourceResolver,
 ) : DelegatingWebMvcConfiguration() {
 
-    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-        val uiRootPath = StringBuilder()
-        val swaggerPath = swaggerUiConfigParameters.path
-        if (swaggerPath.contains("/")) {
-            uiRootPath.append(swaggerPath, 0, swaggerPath.lastIndexOf("/"))
+    @Bean
+    fun requestResponseLogFilter(): FilterRegistrationBean<RequestResponseLogFilter> {
+        return FilterRegistrationBean<RequestResponseLogFilter>().apply {
+            filter = RequestResponseLogFilter()
         }
-
-        registry.addResourceHandler("$uiRootPath/swagger-ui/proxy/**")
-            .addResourceLocations("classpath:/static/proxy/")
-        registry.addResourceHandler("$uiRootPath/swagger-ui/**")
-            .addResourceLocations("classpath:/static/")
-
-        SwaggerWebMvcConfigurer(swaggerUiConfigParameters, swaggerIndexTransformer, actuatorProvider, swaggerResourceResolver).addResourceHandlers(registry)
     }
 
     override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
@@ -65,5 +58,20 @@ class WebConfiguration(
         dateTimeRegistrar.setDateTimeFormatter(DateTimeFormatter.ISO_DATE_TIME)
         dateTimeRegistrar.registerFormatters(conversionService)
         return conversionService
+    }
+
+    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
+        val uiRootPath = StringBuilder()
+        val swaggerPath = swaggerUiConfigParameters.path
+        if (swaggerPath.contains("/")) {
+            uiRootPath.append(swaggerPath, 0, swaggerPath.lastIndexOf("/"))
+        }
+
+        registry.addResourceHandler("$uiRootPath/swagger-ui/proxy/**")
+            .addResourceLocations("classpath:/static/proxy/")
+        registry.addResourceHandler("$uiRootPath/swagger-ui/**")
+            .addResourceLocations("classpath:/static/")
+
+        SwaggerWebMvcConfigurer(swaggerUiConfigParameters, swaggerIndexTransformer, actuatorProvider, swaggerResourceResolver).addResourceHandlers(registry)
     }
 }

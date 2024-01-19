@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.1.5"
+    id("org.springframework.boot") version "3.1.7"
     id("io.spring.dependency-management") version "1.1.3"
     id("com.avast.gradle.docker-compose") version "0.17.6"
     id("org.jmailen.kotlinter") version "3.14.0"
@@ -53,7 +53,7 @@ dependencies {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
         exclude(group = "junit", module = "junit")
     }
-    testImplementation("org.springframework.boot:spring-boot-starter-hateoas:3.1.5")
+    testImplementation("org.springframework.boot:spring-boot-starter-hateoas:3.1.7")
 }
 
 tasks.withType<Test> {
