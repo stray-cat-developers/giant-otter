@@ -1,7 +1,7 @@
 # giant-otter
 This API application collects and shows several swagger apis.
 
-[![Build Status](https://app.travis-ci.com/fennec-fox/giant-otter.svg?branch=master)](https://app.travis-ci.com/fennec-fox/giant-otter)
+[![Build Status](https://github.com/stray-cat-developers/giant-otter/actions/workflows/gradle.yml/badge.svg)](https://github.com/stray-cat-developers/giant-otter)
 
 # New Features!
 
