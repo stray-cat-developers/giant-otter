@@ -1,6 +1,6 @@
 package io.mustelidae.grantotter.domain.crawler
 
-import com.github.kittinunf.fuel.Fuel
+import io.mustelidae.grantotter.domain.client.SpecClientHandler
 import io.mustelidae.grantotter.domain.spec.SwaggerSpec
 import io.mustelidae.grantotter.domain.spec.SwaggerSpecFinder
 import io.mustelidae.grantotter.utils.ClientSupport
@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import java.net.URI
 
 @EnableScheduling
 @Service
 class SwaggerSpecCrawler
 @Autowired constructor(
     private val swaggerSpecFinder: SwaggerSpecFinder,
+    private val specClientHandler: SpecClientHandler,
 ) : ClientSupport(
     Jackson.getMapper(),
     true,
@@ -23,31 +25,10 @@ class SwaggerSpecCrawler
 ) {
 
     fun crawling(swaggerSpec: SwaggerSpec) {
-        val headers: MutableMap<String, Any> = mutableMapOf("Content-Type" to "application/json")
-        swaggerSpec.headers?.let {
-            headers.putAll(it)
-        }
+        val client = specClientHandler.client(swaggerSpec.type)
 
-        val result = Fuel.get(swaggerSpec.url)
-            .header(headers)
-            .responseString()
-            .orElseThrow()
-            .component1()
-
-        if (result.isNullOrBlank().not()) {
-            val mapper = Jackson.getMapper()
-
-            val apiDefinition = when (swaggerSpec.type) {
-                SwaggerSpec.Type.JSON -> {
-                    result!!
-                }
-                SwaggerSpec.Type.YAML -> {
-                    val yaml = Jackson.getYmlMapper().readValue(result, Any::class.java)
-                    mapper.writerWithDefaultPrettyPrinter().writeValueAsString(yaml)
-                }
-            }
-            SwaggerDocCacheStore.add(swaggerSpec, apiDefinition)
-        }
+        val result = client.getSpec(URI(swaggerSpec.url))
+        SwaggerDocCacheStore.add(swaggerSpec, result)
     }
 
     @Scheduled(fixedDelay = 300000) // 5분

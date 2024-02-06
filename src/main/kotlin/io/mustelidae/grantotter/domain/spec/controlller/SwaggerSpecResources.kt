@@ -2,6 +2,7 @@ package io.mustelidae.grantotter.domain.spec.controlller
 
 import io.mustelidae.grantotter.domain.spec.SwaggerSpec
 import io.swagger.v3.oas.annotations.media.Schema
+import org.hibernate.validator.constraints.URL
 import java.time.LocalDateTime
 
 class SwaggerSpecResources {
@@ -11,6 +12,7 @@ class SwaggerSpecResources {
         val type: SwaggerSpec.Type,
         val group: String,
         val name: String,
+        @field:URL
         val url: String,
         val version: String,
         val description: String? = null,

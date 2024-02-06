@@ -53,7 +53,7 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
 
                     if (log.isDebugEnabled) {
                         message.append(", ")
-                        appendRequestBody(message, request)
+                        appendRequestBody(message, multiReadRequest)
                     }
                 }
                 log.info(message.toString())
@@ -116,13 +116,9 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
         loggingMessage.append("txId=$transactionId")
     }
 
-    private fun appendRequestBody(loggingMessage: StringBuilder, request: HttpServletRequest) {
+    private fun appendRequestBody(loggingMessage: StringBuilder, request: MultiReadHttpServletRequest) {
         val requestBody = try {
-            if (request.inputStream == null) {
-                ""
-            } else {
-                StreamUtils.copyToString(request.inputStream, defaultCharset).trimIndent()
-            }
+            StreamUtils.copyToString(request.inputStream, defaultCharset).trimIndent()
         } catch (e: IOException) {
             """{ "error": "Failed to read request body.", "cause": "${e.message}" }""".trimIndent()
         }
@@ -147,15 +143,15 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
         val uri = request.requestURI
 
         return (
-                uri.startsWith("/health") ||
-                        uri.startsWith("/favicon.ico") ||
-                        uri.startsWith("/h2-console") ||
-                        uri.startsWith("/actuator") ||
-                        uri.startsWith("/webjars") ||
-                        uri.startsWith("/swagger-ui") ||
-                        uri.startsWith("/v3/api-docs") ||
-                        uri.startsWith("/v2/api-docs")
-                )
+            uri.startsWith("/health") ||
+                uri.startsWith("/favicon.ico") ||
+                uri.startsWith("/h2-console") ||
+                uri.startsWith("/actuator") ||
+                uri.startsWith("/webjars") ||
+                uri.startsWith("/swagger-ui") ||
+                uri.startsWith("/v3/api-docs") ||
+                uri.startsWith("/v2/api-docs")
+            )
     }
 }
 

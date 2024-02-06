@@ -34,3 +34,8 @@ spring:
     mongodb:
       host: localhost
       database: grantotter
+server:
+  port: 6201
+app:
+  spec:
+    use-dummy: true

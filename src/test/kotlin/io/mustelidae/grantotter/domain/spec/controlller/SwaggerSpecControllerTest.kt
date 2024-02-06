@@ -40,7 +40,7 @@ class SwaggerSpecControllerTest : FlowTestSupport() {
         val swaggerSpecControllerFlow = SwaggerSpecControllerFlow(mockMvc)
 
         val request = ResourceFixture.aSwaggerSpecInvalidRequest()
-        Assertions.assertThrows(IllegalArgumentException::class.java) {
+        Assertions.assertThrows(AssertionError::class.java) {
             swaggerSpecControllerFlow.add(request)
         }
     }

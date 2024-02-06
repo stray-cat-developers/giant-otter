@@ -1,8 +1,8 @@
 package io.mustelidae.grantotter.config
 
-import io.mustelidae.grantotter.common.Error
 import io.mustelidae.grantotter.common.ErrorCode
-import io.mustelidae.grantotter.common.GError
+import io.mustelidae.grantotter.common.ErrorSource
+import io.mustelidae.grantotter.common.NormalError
 import io.mustelidae.grantotter.utils.Jackson
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
@@ -29,7 +29,7 @@ class RestAPIExceptionAdvice(
     @ResponseBody
     fun handleGlobalException(e: RuntimeException, request: HttpServletRequest): GlobalErrorFormat {
         log.error("Unexpected error", e)
-        return errorForm(request, e, GError(ErrorCode.S000, e.message))
+        return errorForm(request, e, NormalError(ErrorCode.S000, e.message))
     }
 
     @ExceptionHandler(value = [HumanException::class])
@@ -43,7 +43,7 @@ class RestAPIExceptionAdvice(
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     fun handleIllegalArgumentException(e: IllegalArgumentException, request: HttpServletRequest): GlobalErrorFormat {
-        return errorForm(request, e, GError(ErrorCode.H001, e.message))
+        return errorForm(request, e, NormalError(ErrorCode.H001, e.message))
     }
 
     @ExceptionHandler(value = [MethodArgumentNotValidException::class])
@@ -56,7 +56,7 @@ class RestAPIExceptionAdvice(
         return errorForm(
             request,
             e,
-            GError(
+            NormalError(
                 ErrorCode.H001,
                 e.bindingResult.fieldError?.defaultMessage,
             ),
@@ -66,7 +66,7 @@ class RestAPIExceptionAdvice(
     /**
      * Default error format
      */
-    private fun errorForm(request: HttpServletRequest, e: Exception, error: Error): GlobalErrorFormat {
+    private fun errorForm(request: HttpServletRequest, e: Exception, error: ErrorSource): GlobalErrorFormat {
         val errorAttributeOptions = if (env.activeProfiles.contains("prod").not()) {
             ErrorAttributeOptions.of(ErrorAttributeOptions.Include.STACK_TRACE)
         } else {
@@ -77,8 +77,8 @@ class RestAPIExceptionAdvice(
             DefaultErrorAttributes().getErrorAttributes(ServletWebRequest(request), errorAttributeOptions)
 
         errorAttributes.apply {
-            this["message"] = error.getMessage()
-            this["code"] = error.getCode()
+            this["message"] = error.message
+            this["code"] = error.code
             this["type"] = e.javaClass.simpleName
         }
 

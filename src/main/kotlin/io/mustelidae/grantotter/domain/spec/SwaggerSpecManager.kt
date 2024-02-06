@@ -1,17 +1,18 @@
 package io.mustelidae.grantotter.domain.spec
 
-import com.github.kittinunf.fuel.Fuel
+import io.mustelidae.grantotter.domain.client.SpecClientHandler
 import io.mustelidae.grantotter.domain.spec.repository.SwaggerSpecRepository
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import java.net.URI
 
 @Service
 class SwaggerSpecManager
 @Autowired constructor(
     private val swaggerSpecRepository: SwaggerSpecRepository,
     private val swaggerSpecFinder: SwaggerSpecFinder,
+    private val specClientHandler: SpecClientHandler,
 ) {
 
     fun add(swaggerSpec: SwaggerSpec): ObjectId {
@@ -27,17 +28,10 @@ class SwaggerSpecManager
     }
 
     private fun validate(swaggerSpec: SwaggerSpec) {
-        val headers = swaggerSpec.headers ?: mutableMapOf()
-        headers.toMutableMap()["Content-Type"] = "application/json"
+        val client = specClientHandler.client(swaggerSpec.type)
 
-        val result = Fuel.get(swaggerSpec.url)
-            .header(headers)
-            .responseString()
-            .second
-            .statusCode
-
-        if (HttpStatus.valueOf(result).is2xxSuccessful.not()) {
-            throw IllegalArgumentException("invalid url(${swaggerSpec.url}). cause by http status is $result")
+        if (client.hasSpec(URI(swaggerSpec.url)).not()) {
+            throw IllegalArgumentException("invalid url(${swaggerSpec.url}).")
         }
     }
 }

@@ -1,5 +1,6 @@
 package io.mustelidae.grantotter.domain.spec.controlller
 
+import io.mustelidae.grantotter.common.Reply
 import io.mustelidae.grantotter.utils.fromJson
 import io.mustelidae.grantotter.utils.toJson
 import org.springframework.hateoas.server.mvc.linkTo
@@ -36,5 +37,7 @@ class SwaggerSpecControllerFlow(
         }.andReturn()
             .response
             .contentAsString
+            .fromJson<Reply<String>>()
+            .content!!
     }
 }

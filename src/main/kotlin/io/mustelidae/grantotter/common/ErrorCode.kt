@@ -10,4 +10,5 @@ enum class ErrorCode(val desc: String) {
 
     // Communication error
     C000("Communication error"),
+    C001("Spec Parse error"),
 }

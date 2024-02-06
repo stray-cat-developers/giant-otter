@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc
 @ActiveProfiles("embedded")
 @ExtendWith(SpringExtension::class)
 @ComponentScan(nameGenerator = FullyQualifiedAnnotationBeanNameGenerator::class)
-@SpringBootTest(classes = [GrantOtterApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = [GrantOtterApplication::class], webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ContextConfiguration(classes = [DefaultEmbeddedMongo::class])
 @AutoConfigureMockMvc
 class FlowTestSupport {

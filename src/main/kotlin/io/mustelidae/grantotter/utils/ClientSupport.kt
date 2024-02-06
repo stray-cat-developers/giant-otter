@@ -7,7 +7,8 @@ import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.core.ResponseResultOf
 import com.github.kittinunf.result.Result
-import io.mustelidae.grantotter.common.CError
+import io.mustelidae.grantotter.common.ErrorCode
+import io.mustelidae.grantotter.common.NormalError
 import io.mustelidae.grantotter.config.CommunicationException
 import org.slf4j.Logger
 import org.springframework.http.HttpStatus
@@ -23,7 +24,7 @@ open class ClientSupport(
 
         if (res.isOk().not()) {
             val error = String(result.component2()!!.response.data)
-            throw CommunicationException(CError(error))
+            throw CommunicationException(NormalError(ErrorCode.C000, error))
         }
 
         return result

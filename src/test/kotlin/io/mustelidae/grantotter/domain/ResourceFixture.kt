@@ -22,7 +22,7 @@ object ResourceFixture {
             SwaggerSpec.Type.JSON,
             "TEST",
             "Grantotter",
-            "http://localhost/v2/api",
+            "htt://localhos/v2/api",
             "2.0",
             "Grantotter Swagger Json Specification",
             mapOf("x-authentication" to "test"),

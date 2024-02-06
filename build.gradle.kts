@@ -54,6 +54,7 @@ dependencies {
         exclude(group = "junit", module = "junit")
     }
     testImplementation("org.springframework.boot:spring-boot-starter-hateoas:3.1.7")
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.1.4")
 }
 
 tasks.withType<Test> {
