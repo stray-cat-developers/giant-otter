@@ -33,6 +33,7 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
         val isAsync = isAsyncDispatch(request)
         val startTime = System.currentTimeMillis()
         val transactionId = UUID.randomUUID().toString()
+        val messageMap = mutableMapOf<String, Any>()
 
         if (isSkipUri(request) || isAsync) {
             filterChain.doFilter(request, response)
@@ -41,43 +42,34 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
             val wrappedResponse = response as? ContentCachingResponseWrapper ?: ContentCachingResponseWrapper(response)
 
             try {
-                val message = StringBuilder()
                 run {
-                    appendTransactionId(message, transactionId)
-                    message.append(", ")
-                    appendHttpMethod(message, request)
-                    message.append(", ")
-                    appendUrl(message, "req", request)
-                    message.append(", ")
-                    appendReqHeader(message, request)
+                    appendTransactionId(messageMap, transactionId)
+                    appendHttpMethod(messageMap, request)
+                    appendUrl(messageMap, "req", request)
+                    appendReqHeader(messageMap, request)
 
                     if (log.isDebugEnabled) {
-                        message.append(", ")
-                        appendRequestBody(message, multiReadRequest)
+                        appendRequestBody(messageMap, multiReadRequest)
                     }
                 }
-                log.info(message.toString())
+                log.info(messageMap.toJson())
+                messageMap.clear()
 
                 filterChain.doFilter(multiReadRequest, wrappedResponse)
             } finally {
-                val message = StringBuilder()
                 run {
-                    appendTransactionId(message, transactionId)
-                    message.append(", ")
-                    appendHttpMethod(message, request)
-                    message.append(", ")
-                    appendUrl(message, "res", request)
-                    message.append(", ")
-                    appendStatus(message, wrappedResponse)
-                    message.append(", ")
-                    appendLatency(message, startTime)
+                    appendTransactionId(messageMap, transactionId)
+                    appendHttpMethod(messageMap, request)
+                    appendUrl(messageMap, "res", request)
+                    appendStatus(messageMap, wrappedResponse)
+                    appendLatency(messageMap, startTime)
 
                     if (log.isDebugEnabled) {
-                        message.append(", ")
-                        appendResponseBody(message, wrappedResponse)
+                        appendResponseBody(messageMap, wrappedResponse)
                     }
 
-                    log.info(message.toString())
+                    log.info(messageMap.toJson())
+                    messageMap.clear()
                 }
 
                 wrappedResponse.copyBodyToResponse()
@@ -85,58 +77,55 @@ class RequestResponseLogFilter : OncePerRequestFilter() {
         }
     }
 
-    private fun appendUrl(loggingMessage: StringBuilder, prefix: String, request: HttpServletRequest) {
-        loggingMessage.append("transfer=$prefix, uri=${request.requestURI}")
+    private fun appendUrl(messageMap: MutableMap<String, Any>, prefix: String, request: HttpServletRequest) {
+        messageMap.apply {
+            this["transfer"] = prefix
+            this["uri"] = request.requestURI
+        }
         request.queryString?.let {
-            loggingMessage.append('?').append(it)
+            messageMap["query"] = it
         }
     }
 
-    private fun appendReqHeader(loggingMessage: StringBuilder, request: HttpServletRequest) {
+    private fun appendReqHeader(messageMap: MutableMap<String, Any>, request: HttpServletRequest) {
         val headers = ServletServerHttpRequest(request).headers
 
-        val headerString = try {
-            headers.toJson()
-        } catch (e: Exception) {
-            null
+        messageMap["headers"] = headers
+    }
+
+    private fun appendHttpMethod(messageMap: MutableMap<String, Any>, request: HttpServletRequest) {
+        messageMap.apply {
+            this["method"] = request.method
+            this["contentType"] = request.contentType
+            this["encoding"] = request.characterEncoding
         }
-
-        if (headerString.isNullOrBlank().not()) {
-            loggingMessage.append("headers=$headerString")
-        }
     }
 
-    private fun appendHttpMethod(loggingMessage: StringBuilder, request: HttpServletRequest) {
-        loggingMessage.append("method=${request.method}, ")
-        loggingMessage.append("contentType=${request.contentType}, ")
-        loggingMessage.append("encoding=${request.characterEncoding}")
+    private fun appendTransactionId(messageMap: MutableMap<String, Any>, transactionId: String) {
+        messageMap["txId"] = transactionId
     }
 
-    private fun appendTransactionId(loggingMessage: StringBuilder, transactionId: String) {
-        loggingMessage.append("txId=$transactionId")
-    }
-
-    private fun appendRequestBody(loggingMessage: StringBuilder, request: MultiReadHttpServletRequest) {
+    private fun appendRequestBody(messageMap: MutableMap<String, Any>, request: MultiReadHttpServletRequest) {
         val requestBody = try {
             StreamUtils.copyToString(request.inputStream, defaultCharset).trimIndent()
         } catch (e: IOException) {
             """{ "error": "Failed to read request body.", "cause": "${e.message}" }""".trimIndent()
         }
 
-        loggingMessage.append("payload-request=${PrivacyLogFilter.masking(requestBody)}")
+        messageMap["requestBody"] = PrivacyLogFilter.masking(requestBody)
     }
 
-    private fun appendStatus(loggingMessage: StringBuilder, wrappedResponse: ContentCachingResponseWrapper) {
-        loggingMessage.append("status=${wrappedResponse.status}")
+    private fun appendStatus(messageMap: MutableMap<String, Any>, wrappedResponse: ContentCachingResponseWrapper) {
+        messageMap["status"] = wrappedResponse.status
     }
 
-    private fun appendLatency(loggingMessage: StringBuilder, startTime: Long) {
-        loggingMessage.append("latency=").append(System.currentTimeMillis() - startTime).append("ms")
+    private fun appendLatency(messageMap: MutableMap<String, Any>, startTime: Long) {
+        messageMap["latency"] = "${System.currentTimeMillis() - startTime}ms"
     }
 
-    private fun appendResponseBody(loggingMessage: StringBuilder, wrappedResponse: ContentCachingResponseWrapper) {
+    private fun appendResponseBody(messageMap: MutableMap<String, Any>, wrappedResponse: ContentCachingResponseWrapper) {
         val responseBody = wrappedResponse.contentAsByteArray.toString(defaultCharset)
-        loggingMessage.append("payload-response=$responseBody")
+        messageMap["responseBody"] = PrivacyLogFilter.masking(responseBody)
     }
 
     private fun isSkipUri(request: HttpServletRequest): Boolean {

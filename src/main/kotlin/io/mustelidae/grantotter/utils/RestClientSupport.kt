@@ -14,6 +14,7 @@ import org.apache.hc.client5.http.classic.methods.HttpPut
 import org.apache.hc.client5.http.entity.UrlEncodedFormEntity
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse
+import org.apache.hc.core5.http.Header
 import org.apache.hc.core5.http.io.entity.EntityUtils
 import org.apache.hc.core5.http.io.entity.StringEntity
 import org.apache.hc.core5.http.message.BasicNameValuePair
@@ -24,7 +25,7 @@ import java.nio.charset.Charset
 open class RestClientSupport(
     val objectMapper: ObjectMapper,
     private val writeLog: Boolean,
-    val log: Logger,
+    private val log: Logger,
 ) {
 
     private fun <T> T.toJson(): String = objectMapper.writeValueAsString(this)
@@ -131,7 +132,7 @@ open class RestClientSupport(
 
     fun CloseableHttpResponse.orElseThrow(): String {
         val response = EntityUtils.toString(this.entity, Charset.defaultCharset())
-        writeLog(response)
+        writeLog(this.code, this.headers, response)
 
         if (this.isOK().not()) {
             val error = if (response.isNullOrEmpty()) {
@@ -159,7 +160,7 @@ open class RestClientSupport(
 
     fun <T : ExternalServiceError> CloseableHttpResponse.orElseThrow(clazz: Class<T>): String {
         val response = EntityUtils.toString(this.entity, Charset.defaultCharset())
-        writeLog(response)
+        writeLog(this.code, this.headers, response)
 
         if (this.isOK().not()) {
             val error = if (response.isNullOrEmpty()) {
@@ -181,9 +182,9 @@ open class RestClientSupport(
         return (HttpStatus.valueOf(this.code).is2xxSuccessful)
     }
 
-    private fun writeLog(response: String) {
+    private fun writeLog(code: Int, headers: Array<Header>, responseBody: String) {
         if (writeLog) {
-            log.info("-- response --\n$response")
+            log.info("status=$code, headers=${headers.toJson()} responseBody=$responseBody")
         }
     }
 
