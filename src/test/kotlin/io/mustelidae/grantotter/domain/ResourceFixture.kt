@@ -9,11 +9,11 @@ object ResourceFixture {
             SwaggerSpec.Type.JSON,
             "TEST",
             "Grantotter",
-            "http://localhost:$port/v2/api-docs",
-            "2.0",
+            "http://localhost:$port/v3/api-docs",
+            "3.0.1",
             "Grantotter Swagger Json Specification",
             mapOf("x-authentication" to "test"),
-            listOf("Platform")
+            listOf("Platform"),
         )
     }
 
@@ -22,11 +22,11 @@ object ResourceFixture {
             SwaggerSpec.Type.JSON,
             "TEST",
             "Grantotter",
-            "http://localhost/v2/api",
+            "htt://localhos/v2/api",
             "2.0",
             "Grantotter Swagger Json Specification",
             mapOf("x-authentication" to "test"),
-            listOf("Platform")
+            listOf("Platform"),
         )
     }
 }

@@ -1,7 +1,19 @@
-GET {{host}}/v2/api-docs
+GET {{host}}/v3/api-docs
 Accept: application/json
 
 ###
-
 GET {{host}}/swagger/specifications/5ed5ea6704f5bd43261e6f14/docket
 Content-Type: application/json
+
+###
+POST {{host}}/swagger/specifications
+Content-Type: application/json
+accept: application/json
+
+{"type":"JSON","group":"TEST","name":"Grantotter","url":"http://localhost:0/v3/api-docs","version":"3.0.1","description":"Grantotter Swagger Json Specification","headers":{"x-authentication":"test"},"tags":["Platform"]}
+
+###
+POST {{host}}/sample
+Content-Type: application/json
+
+{"name": "test"}

@@ -7,7 +7,6 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles("embedded")
 @SpringBootTest
 class GrantOtterApplicationTests {
-
     @Test
     fun contextLoads() {}
 }

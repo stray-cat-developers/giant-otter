@@ -7,7 +7,8 @@ import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.core.ResponseResultOf
 import com.github.kittinunf.result.Result
-import io.mustelidae.grantotter.common.CError
+import io.mustelidae.grantotter.common.ErrorCode
+import io.mustelidae.grantotter.common.NormalError
 import io.mustelidae.grantotter.config.CommunicationException
 import org.slf4j.Logger
 import org.springframework.http.HttpStatus
@@ -15,7 +16,7 @@ import org.springframework.http.HttpStatus
 open class ClientSupport(
     val objectMapper: ObjectMapper,
     private val writeLog: Boolean,
-    val log: Logger
+    val log: Logger,
 ) {
     fun ResponseResultOf<String>.orElseThrow(): Result<String, FuelError> {
         writeLog(this)
@@ -23,18 +24,7 @@ open class ClientSupport(
 
         if (res.isOk().not()) {
             val error = String(result.component2()!!.response.data)
-            throw CommunicationException(CError(error))
-        }
-
-        return result
-    }
-
-    internal open fun ResponseResultOf<String>.orElseNull(): Result<String, FuelError>? {
-        writeLog(this)
-        val (_, res, result) = this
-
-        if (res.isOk().not()) {
-            return null
+            throw CommunicationException(NormalError(ErrorCode.C000, error))
         }
 
         return result
@@ -46,8 +36,9 @@ open class ClientSupport(
     private fun writeLog(response: ResponseResultOf<String>) {
         val (req, res, result) = response
 
-        if (writeLog && res.isOk())
+        if (writeLog && res.isOk()) {
             log.info("$req\n-----------\n$res")
+        }
 
         if (res.isOk().not()) {
             val msg = StringBuilder("$req\n-----------\n$res")
@@ -59,18 +50,14 @@ open class ClientSupport(
     }
 
     private fun Response.isOk(): Boolean {
-        if (this.statusCode == -1)
+        if (this.statusCode == -1) {
             return false
+        }
 
         return (HttpStatus.valueOf(this.statusCode).is2xxSuccessful)
     }
 
     internal inline fun <reified T> String.fromJson(): T = objectMapper.readValue(this)
-
-    internal inline fun <reified T> Result<String, FuelError>.fromJson(): T {
-        return this.component1()!!
-            .fromJson()
-    }
 
     companion object {
         init {

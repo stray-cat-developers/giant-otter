@@ -1,26 +1,26 @@
 package io.mustelidae.grantotter.domain.spec.controlller
 
 import io.mustelidae.grantotter.domain.spec.SwaggerSpec
-import io.swagger.annotations.ApiModel
+import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.validator.constraints.URL
 import java.time.LocalDateTime
 
 class SwaggerSpecResources {
 
-    @ApiModel("SwaggerSpec.Request")
-    class Request(
+    @Schema(name = "GrantOtter.SwaggerSpec.Request")
+    data class Request(
         val type: SwaggerSpec.Type,
-        val category: String,
+        val group: String,
         val name: String,
         @field:URL
         val url: String,
         val version: String,
         val description: String? = null,
         val headers: Map<String, Any>? = null,
-        val tags: List<String>? = null
+        val tags: List<String>? = null,
     )
 
-    @ApiModel("SwaggerSpec.Reply")
+    @Schema(name = "GrantOtter.SwaggerSpec.Reply")
     data class Reply(
         val id: String,
         val createdAt: LocalDateTime,
@@ -30,7 +30,7 @@ class SwaggerSpecResources {
         val version: String,
         val description: String? = null,
         val headers: Map<String, Any>? = null,
-        val tags: List<String>? = null
+        val tags: List<String>? = null,
     ) {
         companion object {
             fun from(swaggerSpec: SwaggerSpec): Reply {
@@ -44,7 +44,7 @@ class SwaggerSpecResources {
                         version,
                         description,
                         headers,
-                        tags
+                        tags,
                     )
                 }
             }

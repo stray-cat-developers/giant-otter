@@ -16,7 +16,8 @@ class SwaggerSpec(
     val version: String,
     val description: String? = null,
     val headers: Map<String, Any>? = null,
-    val tags: List<String>? = null
+    val tags: List<String>? = null,
+    val group: String? = null,
 ) {
     @Id
     var id: ObjectId = ObjectId()
@@ -26,6 +27,6 @@ class SwaggerSpec(
 
     enum class Type {
         JSON,
-        YAML
+        YAML,
     }
 }

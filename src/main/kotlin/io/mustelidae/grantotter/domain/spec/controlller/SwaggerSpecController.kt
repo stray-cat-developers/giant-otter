@@ -7,7 +7,8 @@ import io.mustelidae.grantotter.domain.spec.SwaggerSpecFinder
 import io.mustelidae.grantotter.domain.spec.SwaggerSpecManager
 import io.mustelidae.grantotter.utils.toReplies
 import io.mustelidae.grantotter.utils.toReply
-import io.swagger.annotations.Api
+import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -15,18 +16,18 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import javax.validation.Valid
 
-@Api(tags = ["Management"], description = "API Docket Spec Management")
+@Tag(name = "Management", description = "API Docket Spec Management")
 @RestController
 @RequestMapping("/swagger/specifications")
 class SwaggerSpecController
 @Autowired constructor(
     private val swaggerSpecManager: SwaggerSpecManager,
-    private val swaggerSpecFinder: SwaggerSpecFinder
+    private val swaggerSpecFinder: SwaggerSpecFinder,
 ) {
 
     @GetMapping
@@ -47,10 +48,12 @@ class SwaggerSpecController
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun add(@Valid request: SwaggerSpecResources.Request): Reply<String> {
-
+    fun add(
+        @Valid @RequestBody
+        request: SwaggerSpecResources.Request,
+    ): Reply<String> {
         val spec = request.run {
-            SwaggerSpec(type, "[$category] $name", url, version, description, headers, tags)
+            SwaggerSpec(type, "[$group] $name", url, version, description, headers, tags)
         }
 
         val id = swaggerSpecManager.add(spec)

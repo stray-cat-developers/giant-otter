@@ -10,6 +10,7 @@ logging:
     org.hibernate.tool.schema: error
     com.zaxxer.hikari: error
     io.swagger.models.parameters.AbstractSerializableParameter: error
+    io.mustelidae.grantotter.config.RequestResponseLogFilter: debug
 
 server:
   error:
@@ -23,10 +24,18 @@ server:
 spring:
   main:
     lazy-initialization: true
+    allow-bean-definition-overriding: true
 ---
 spring:
-  profiles: embedded
+  config:
+    activate:
+      on-profile: embedded
   data:
     mongodb:
       host: localhost
       database: grantotter
+server:
+  port: 6201
+app:
+  spec:
+    use-dummy: true

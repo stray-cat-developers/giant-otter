@@ -1,61 +1,47 @@
 package io.mustelidae.grantotter.config
 
-import com.mongodb.MongoClient
-import de.flapdoodle.embed.mongo.MongodExecutable
-import de.flapdoodle.embed.mongo.MongodProcess
-import de.flapdoodle.embed.mongo.MongodStarter
-import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
-import de.flapdoodle.embed.mongo.config.Net
+import com.mongodb.ConnectionString
+import com.mongodb.client.MongoClients
 import de.flapdoodle.embed.mongo.distribution.Version
-import de.flapdoodle.embed.process.runtime.Network
+import de.flapdoodle.embed.mongo.transitions.Mongod
+import de.flapdoodle.embed.mongo.transitions.RunningMongodProcess
+import de.flapdoodle.reverse.TransitionWalker
+import jakarta.annotation.PostConstruct
+import jakarta.annotation.PreDestroy
 import org.springframework.boot.autoconfigure.mongo.MongoProperties
-import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Lazy
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Component
 import java.io.IOException
-import javax.annotation.PostConstruct
-import javax.annotation.PreDestroy
-import kotlin.random.Random
 
 @Lazy(false)
-@Import(value = [EmbeddedMongoAutoConfiguration::class])
 @Component
 @EnableConfigurationProperties(value = [MongoProperties::class])
 class DefaultEmbeddedMongo(
-    private val mongoProperties: MongoProperties
+    private val mongoProperties: MongoProperties,
 ) {
-
-    lateinit var mongoExecutable: MongodExecutable
-    lateinit var mongoProcess: MongodProcess
-    private val starter = MongodStarter.getDefaultInstance()
-    var port: Int = Random.nextInt(27000, 27999)
+    lateinit var mongoProcess: TransitionWalker.ReachedState<RunningMongodProcess>
+    var port: Int = -1
+    lateinit var host: String
 
     @PostConstruct
     fun startup() {
-        val builder = MongodConfigBuilder()
-            .version(Version.Main.PRODUCTION)
-            .net(Net(mongoProperties.host, port, Network.localhostIsIPv6()))
-            .build()
-        this.mongoExecutable = starter.prepare(builder)
-        this.mongoProcess = this.mongoExecutable.start()
+        mongoProcess = Mongod.instance().start(Version.Main.V5_0)
+        host = mongoProcess.current().serverAddress.host
+        port = mongoProcess.current().serverAddress.port
     }
 
     @Bean
     @Throws(IOException::class)
     fun mongoTemplate(): MongoTemplate {
-        val mongoClient = MongoClient(mongoProperties.host, port)
-
-        @Suppress("DEPRECATION")
+        val mongoClient = MongoClients.create(ConnectionString("mongodb://$host:$port"))
         return MongoTemplate(mongoClient, mongoProperties.database)
     }
 
     @PreDestroy
     fun shutdown() {
-        mongoProcess.stop()
-        mongoExecutable.stop()
+        mongoProcess.current().stop()
     }
 }

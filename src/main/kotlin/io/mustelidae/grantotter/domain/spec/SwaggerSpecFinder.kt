@@ -9,12 +9,13 @@ import org.springframework.stereotype.Service
 @Service
 class SwaggerSpecFinder
 @Autowired constructor(
-    private val swaggerSpecRepository: SwaggerSpecRepository
+    private val swaggerSpecRepository: SwaggerSpecRepository,
 ) {
     fun findOne(id: ObjectId): SwaggerSpec {
         val spec = swaggerSpecRepository.findById(id)
-        if (spec.isPresent.not())
+        if (spec.isPresent.not()) {
             throw DataNotFoundException("specification not found.")
+        }
 
         return spec.get()
     }

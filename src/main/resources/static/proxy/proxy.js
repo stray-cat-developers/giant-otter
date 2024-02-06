@@ -1,7 +1,6 @@
 const setProxy = function(){
         if(!window.ui) return // swagger-ui has not been initialized yet
         const uiConfigs = window.ui.getConfigs()
-
         uiConfigs.showMutatedRequest = false
         uiConfigs.requestInterceptor = (r)=>{
             if(!r.url.includes(window.location.host))
@@ -12,3 +11,4 @@ const setProxy = function(){
         clearInterval(timer)
     }
 const timer = setInterval(setProxy,500);
+// static/proxy.js
