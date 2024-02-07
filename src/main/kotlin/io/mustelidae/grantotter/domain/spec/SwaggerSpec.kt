@@ -11,13 +11,13 @@ import java.time.LocalDateTime
 @Document
 class SwaggerSpec(
     val type: Type,
+    val group: String,
     val name: String,
     val url: String,
     val version: String,
     val description: String? = null,
     val headers: Map<String, Any>? = null,
     val tags: List<String>? = null,
-    val group: String? = null,
 ) {
     @Id
     var id: ObjectId = ObjectId()

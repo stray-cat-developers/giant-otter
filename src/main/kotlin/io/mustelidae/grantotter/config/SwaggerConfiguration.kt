@@ -44,12 +44,13 @@ class SwaggerConfiguration {
     fun apis(swaggerUiConfig: SwaggerUiConfigProperties): Set<SwaggerUrl> {
         val swaggerUrls = mutableSetOf<SwaggerUrl>()
         swaggerUrls.addAll(SwaggerDocCacheStore.findAll().map { it.first }.sortedBy { it.name })
+        swaggerUiConfig.urls = swaggerUrls
         return swaggerUrls
     }
 
     @Bean
     fun default(): GroupedOpenApi = GroupedOpenApi.builder()
-        .group("API")
+        .group("Management")
         .addOpenApiCustomizer {
             it.info.version("v1")
         }

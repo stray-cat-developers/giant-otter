@@ -1,7 +1,6 @@
 package io.mustelidae.grantotter
 
 import io.mustelidae.grantotter.domain.crawler.SwaggerSpecCrawler
-import io.mustelidae.grantotter.domain.spec.SwaggerSpec
 import io.mustelidae.grantotter.domain.spec.SwaggerSpecManager
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.CommandLineRunner
@@ -19,7 +18,7 @@ class ApplicationInitializer(
     private var port: Int = 0
 
     override fun run(vararg args: String?) {
-        val spec = SwaggerSpec(
+        /*val spec = SwaggerSpec(
             SwaggerSpec.Type.JSON,
             "[CONSOLE] GrantOtter",
             "http://localhost:$port/v3/api-docs",
@@ -27,6 +26,6 @@ class ApplicationInitializer(
             "Grant otter manage api",
         )
         swaggerSpecManager.add(spec)
-        crawler.flushAndCrawlingAll()
+        crawler.flushAndCrawlingAll()*/
     }
 }

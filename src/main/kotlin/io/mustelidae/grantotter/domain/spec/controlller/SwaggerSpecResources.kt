@@ -24,6 +24,7 @@ class SwaggerSpecResources {
     data class Reply(
         val id: String,
         val createdAt: LocalDateTime,
+        val group: String,
         val name: String,
         val type: SwaggerSpec.Type,
         val url: String,
@@ -38,6 +39,7 @@ class SwaggerSpecResources {
                     Reply(
                         id.toString(),
                         createdAt,
+                        group,
                         name,
                         type,
                         url,
