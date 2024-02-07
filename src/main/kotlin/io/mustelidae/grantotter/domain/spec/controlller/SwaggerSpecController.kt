@@ -7,6 +7,7 @@ import io.mustelidae.grantotter.domain.spec.SwaggerSpecFinder
 import io.mustelidae.grantotter.domain.spec.SwaggerSpecManager
 import io.mustelidae.grantotter.utils.toReplies
 import io.mustelidae.grantotter.utils.toReply
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.bson.types.ObjectId
@@ -31,6 +32,7 @@ class SwaggerSpecController
 ) {
 
     @GetMapping
+    @Operation(summary = "Find all Swagger Spec")
     fun findAll(): Replies<SwaggerSpecResources.Reply> {
         val specs = swaggerSpecFinder.findAll()
         return specs.map {
@@ -39,6 +41,7 @@ class SwaggerSpecController
     }
 
     @GetMapping("{id}")
+    @Operation(summary = "Find Swagger Spec")
     fun findOne(@PathVariable id: String): Reply<SwaggerSpecResources.Reply> {
         val objectId = ObjectId(id)
         val spec = swaggerSpecFinder.findOne(objectId)
@@ -47,13 +50,14 @@ class SwaggerSpecController
     }
 
     @PostMapping
+    @Operation(summary = "Add Swagger Spec")
     @ResponseStatus(HttpStatus.CREATED)
     fun add(
         @Valid @RequestBody
         request: SwaggerSpecResources.Request,
     ): Reply<String> {
         val spec = request.run {
-            SwaggerSpec(type, "[$group] $name", url, version, description, headers, tags)
+            SwaggerSpec(type, group, name, url, version, description, headers, tags)
         }
 
         val id = swaggerSpecManager.add(spec)
@@ -61,6 +65,7 @@ class SwaggerSpecController
     }
 
     @DeleteMapping("{id}")
+    @Operation(summary = "Remove Swagger Spec")
     fun remove(@PathVariable id: String): Reply<Unit> {
         swaggerSpecManager.remove(ObjectId(id))
         return Unit.toReply()

@@ -16,10 +16,11 @@ class CrawlingController
     private val swaggerSpecCrawler: SwaggerSpecCrawler,
 ) {
 
-    @Operation(description = "retry crawling all")
+    @Operation(summary = "Crawling")
     @PutMapping
     fun crawlingAll(): Reply<Unit> {
         swaggerSpecCrawler.flushAndCrawlingAll()
+
         return Unit.toReply()
     }
 }

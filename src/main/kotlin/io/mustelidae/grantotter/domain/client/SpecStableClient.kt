@@ -43,6 +43,6 @@ class SpecStableClient(
             throw CommunicationException(NormalError(ErrorCode.C001, "The Open API Spec format(JSON) is incorrect."))
         }
 
-        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result)
+        return result
     }
 }
