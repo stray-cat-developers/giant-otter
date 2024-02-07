@@ -7,7 +7,9 @@ import io.mustelidae.grantotter.domain.spec.SwaggerSpecFinder
 import io.mustelidae.grantotter.utils.ClientSupport
 import io.mustelidae.grantotter.utils.Jackson
 import org.slf4j.LoggerFactory
+import org.springdoc.core.properties.AbstractSwaggerUiConfigProperties
 import org.springdoc.core.properties.SpringDocConfigProperties
+import org.springdoc.core.properties.SwaggerUiConfigProperties
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
@@ -21,6 +23,8 @@ class SwaggerSpecCrawler
     private val swaggerSpecFinder: SwaggerSpecFinder,
     private val specClientHandler: SpecClientHandler,
     private val swaggerDocConfigProperties: SpringDocConfigProperties,
+    private val swaggerUrlSet: Set<AbstractSwaggerUiConfigProperties.SwaggerUrl>,
+    private val swaggerUiConfig: SwaggerUiConfigProperties,
 ) : ClientSupport(
     Jackson.getMapper(),
     true,
@@ -31,8 +35,6 @@ class SwaggerSpecCrawler
         val client = specClientHandler.client(type)
 
         val result = client.getSpec(URI(swaggerSpec.url))
-
-        log.debug("spec=$result")
 
         val convertor = SpecConvertor(type, result)
 
@@ -53,9 +55,18 @@ class SwaggerSpecCrawler
         for (spec in specs) {
             try {
                 this.crawling(spec)
+                this.updateOpenAPIGroup()
             } catch (e: Exception) {
                 log.error("${spec.name} can't crawing. cause by ${e.message}")
             }
+        }
+    }
+
+    fun updateOpenAPIGroup() {
+        swaggerUiConfig.urls = swaggerUrlSet.toMutableSet().apply {
+            clear()
+            val urls = SwaggerDocCacheStore.findAll()
+            addAll(urls.map { it.first }.sortedBy { it.name })
         }
     }
 }
