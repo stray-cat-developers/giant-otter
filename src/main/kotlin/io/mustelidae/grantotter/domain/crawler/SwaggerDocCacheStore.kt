@@ -9,7 +9,7 @@ object SwaggerDocCacheStore {
     private val cacheStore: ConcurrentHashMap<String, Pair<SwaggerUrl, String>> = ConcurrentHashMap()
 
     fun add(swaggerSpec: SwaggerSpec, apiDefinition: String) {
-        val group = swaggerSpec.group ?: "API"
+        val group = swaggerSpec.group
         val swaggerUrl = SwaggerUrl(group, "/swagger/specifications/${swaggerSpec.id}/docket", swaggerSpec.name)
         cacheStore[swaggerSpec.id.toString()] = Pair(swaggerUrl, apiDefinition)
     }
