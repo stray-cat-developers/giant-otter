@@ -11,4 +11,3 @@ const setProxy = function(){
         clearInterval(timer)
     }
 const timer = setInterval(setProxy,500);
-// static/proxy.js
