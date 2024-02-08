@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.1.7"
+    id("org.springframework.boot") version "3.2.2"
     id("io.spring.dependency-management") version "1.1.3"
     id("com.avast.gradle.docker-compose") version "0.17.6"
     id("org.jmailen.kotlinter") version "3.14.0"
@@ -32,7 +32,7 @@ dependencies {
 
     implementation("com.github.kittinunf.fuel:fuel:2.3.1") // library deprecated.
 
-    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.9.0")
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.12.2")
 
     testImplementation("io.mockk:mockk:1.9.3")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
@@ -53,7 +53,7 @@ dependencies {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
         exclude(group = "junit", module = "junit")
     }
-    testImplementation("org.springframework.boot:spring-boot-starter-hateoas:3.1.7")
+    testImplementation("org.springframework.boot:spring-boot-starter-hateoas:3.2.2")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.1.4")
     implementation("io.swagger.parser.v3:swagger-parser-v2-converter:2.1.20")
     // Java Version
