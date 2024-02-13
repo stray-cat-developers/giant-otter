@@ -1,6 +1,7 @@
 package io.mustelidae.grantotter.domain.spec.controlller
 
 import io.kotest.assertions.asClue
+import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mustelidae.grantotter.config.FlowTestSupport
@@ -24,7 +25,9 @@ class SwaggerSpecControllerTest : FlowTestSupport() {
         val id = swaggerSpecControllerFlow.add(request)
 
         val spec = swaggerSpecControllerFlow.findOne(id)
+        val specs = swaggerSpecControllerFlow.findAll()
 
+        specs.size shouldBeGreaterThan 0
         spec shouldNotBe null
         spec.asClue {
             it.id shouldBe id

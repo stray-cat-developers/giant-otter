@@ -1,5 +1,6 @@
 package io.mustelidae.grantotter.domain.spec.controlller
 
+import io.mustelidae.grantotter.common.Replies
 import io.mustelidae.grantotter.common.Reply
 import io.mustelidae.grantotter.utils.fromJson
 import io.mustelidae.grantotter.utils.toJson
@@ -39,5 +40,19 @@ class SwaggerSpecControllerFlow(
             .contentAsString
             .fromJson<Reply<String>>()
             .content!!
+    }
+
+    fun findAll(): List<SwaggerSpecResources.Reply> {
+        val uri = linkTo<SwaggerSpecController> { findAll() }.toUri()
+        return mockMvc.get(uri) {
+            contentType = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { is2xxSuccessful() }
+        }.andReturn()
+            .response
+            .contentAsString
+            .fromJson<Replies<SwaggerSpecResources.Reply>>()
+            .getContent()
+            .toList()
     }
 }
