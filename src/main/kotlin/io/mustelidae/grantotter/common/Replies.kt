@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import org.springframework.util.Assert
 import java.util.Collections
 
-@Schema(name = "GrantOtter.Replies", description = "Http Json Response Base Format (Collection 형태의 리소스를 반환할 때 사용)")
+@Schema(name = "GrantOtter.Common.Replies", description = "Http Json Response Base Format (Collection 형태의 리소스를 반환할 때 사용)")
 open class Replies<T>(content: Iterable<T>) : Iterable<T> {
 
     @JsonIgnore
