@@ -3,7 +3,7 @@ package io.mustelidae.grantotter.common
 import com.fasterxml.jackson.annotation.JsonUnwrapped
 import io.swagger.v3.oas.annotations.media.Schema
 
-@Schema(name = "GrantOtter.Common.Reply", description = "Http Json Response Base Format (Class 형태의 리소스를 반환할 때 사용)")
+@Schema(name = "GrantOtter.Reply", description = "Http Json Response Base Format (Class 형태의 리소스를 반환할 때 사용)")
 open class Reply<T>() {
     @get:JsonUnwrapped
     var content: T? = null
