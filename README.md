@@ -4,6 +4,8 @@ This API application collects and shows several swagger apis.
 [![Build Status](https://github.com/stray-cat-developers/giant-otter/actions/workflows/gradle.yml/badge.svg)](https://github.com/stray-cat-developers/giant-otter)
 
 ## New Features!
+### v1.0.1
+- Fixed the 'org.springframework.hateoas.mediatype.PropertyUtils' cannot find read-write method error
 ### v1.0.0
 - You can view API documentation from multiple API servers in one place using the OpenAPI Spec.
 - Automatically convert API server documentation with 2.x Spec to 3.x Spec.
