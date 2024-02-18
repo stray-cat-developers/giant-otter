@@ -3,7 +3,13 @@ This API application collects and shows several swagger apis.
 
 [![Build Status](https://github.com/stray-cat-developers/giant-otter/actions/workflows/gradle.yml/badge.svg)](https://github.com/stray-cat-developers/giant-otter)
 
-# New Features!
+## New Features!
+### v1.0.0
+- You can view API documentation from multiple API servers in one place using the OpenAPI Spec.
+- Automatically convert API server documentation with 2.x Spec to 3.x Spec.
+- Update the API Spec every 5 minutes by crawling for changes.
+- APIs can be queried by group.
+
 
 # Installation
 ### Quick start
@@ -11,7 +17,7 @@ Java, Docker must be installed before starting.
 Standalone system using embedded mongo database.
 
 ```sh
-git clone https://github.com/fennec-fox/grant-otter.git
+git clone https://github.com/stray-cat-developers/giant-otter.git
 ./quick-start.sh
 ```
 Swagger api page is http://localhost:6200/swagger-ui.html
