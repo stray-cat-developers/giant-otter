@@ -25,17 +25,39 @@ spring:
   main:
     lazy-initialization: true
     allow-bean-definition-overriding: true
+
 ---
 spring:
   config:
     activate:
       on-profile: embedded
-  data:
-    mongodb:
-      host: localhost
-      database: grantotter
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: false
+        default_batch_fetch_size: 50
+      org:
+        hibernate:
+          envers:
+            audit_strategy: org.hibernate.envers.strategy.DefaultAuditStrategy
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:h2:mem:default;DB_CLOSE_ON_EXIT=FALSE;AUTOCOMMIT=OFF;TRACE_LEVEL_FILE=2;MODE=MySQL;
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    hikari:
+      minimum-idle: 40
+      maximum-pool-size: 60
+      pool-name: SpringBootHikariCP
 server:
-  port: 6201
+  port: 6211
 app:
   spec:
     use-dummy: true

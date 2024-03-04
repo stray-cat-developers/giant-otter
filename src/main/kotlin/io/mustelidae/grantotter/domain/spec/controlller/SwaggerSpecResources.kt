@@ -17,7 +17,6 @@ class SwaggerSpecResources {
         val version: String,
         val description: String? = null,
         val headers: Map<String, Any>? = null,
-        val tags: List<String>? = null,
     )
 
     @Schema(name = "GrantOtter.SwaggerSpec.Reply")
@@ -31,13 +30,12 @@ class SwaggerSpecResources {
         val version: String,
         val description: String? = null,
         val headers: Map<String, Any>? = null,
-        val tags: List<String>? = null,
     ) {
         companion object {
             fun from(swaggerSpec: SwaggerSpec): Reply {
                 return swaggerSpec.run {
                     Reply(
-                        id.toString(),
+                        getId().toString(),
                         createdAt,
                         group,
                         name,
@@ -45,8 +43,7 @@ class SwaggerSpecResources {
                         url,
                         version,
                         description,
-                        headers,
-                        tags,
+                        getHeader(),
                     )
                 }
             }
