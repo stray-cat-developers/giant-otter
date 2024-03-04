@@ -13,13 +13,15 @@ import java.io.InputStream
 class SwaggerProxyIndexPageTransformer(
     swaggerUiConfig: SwaggerUiConfigProperties?,
     swaggerUiOAuthProperties: SwaggerUiOAuthProperties?,
-    swaggerUiConfigParameters: SwaggerUiConfigParameters?, swaggerWelcomeCommon: SwaggerWelcomeCommon?,
-    objectMapperProvider: ObjectMapperProvider?
+    swaggerUiConfigParameters: SwaggerUiConfigParameters?,
+    swaggerWelcomeCommon: SwaggerWelcomeCommon?,
+    objectMapperProvider: ObjectMapperProvider?,
 ) : SwaggerIndexPageTransformer(
-    swaggerUiConfig, swaggerUiOAuthProperties,
+    swaggerUiConfig,
+    swaggerUiOAuthProperties,
     swaggerUiConfigParameters,
     swaggerWelcomeCommon,
-    objectMapperProvider
+    objectMapperProvider,
 ) {
 
     override fun defaultTransformations(inputStream: InputStream?): String {
@@ -28,7 +30,8 @@ class SwaggerProxyIndexPageTransformer(
             throw IllegalStateException("requestInterceptor is already defined, proxying request won't work as expected")
         }
         val proxied = default.replace(
-            "});", """
+            "});",
+            """
                 });
             const setProxy = function() {
                     if(!window.ui) return // swagger-ui has not been initialized yet
@@ -42,7 +45,7 @@ class SwaggerProxyIndexPageTransformer(
                     clearInterval(timer)
                 }
             const timer = setInterval(setProxy, 500);
-        """.trimIndent()
+            """.trimIndent(),
         )
         return proxied
     }
