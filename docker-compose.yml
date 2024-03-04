@@ -1,6 +1,13 @@
 version: '3.3'
 services:
-  mongo:
-    image: mongo:4.0
+  mysql:
+    image: mysql:8.3
+    platform: linux/arm64/v8
+    command: "mysqld --character-set-server=utf8mb4"
+    environment:
+      MYSQL_ROOT_PASSWORD: local
+      MYSQL_DATABASE: local
+      MYSQL_USER: local
+      MYSQL_PASSWORD: local
     ports:
-      - "27018:27017"
+      - "6201:3306"

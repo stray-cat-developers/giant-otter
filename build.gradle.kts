@@ -6,12 +6,14 @@ plugins {
     id("com.avast.gradle.docker-compose") version "0.17.6"
     id("org.jmailen.kotlinter") version "3.14.0"
     kotlin("jvm") version "1.9.21"
+    kotlin("plugin.jpa") version "1.9.22"
     kotlin("plugin.spring") version "1.9.21"
     kotlin("plugin.allopen") version "1.9.21"
+    kotlin("plugin.noarg") version "1.9.22"
 }
 
 group = "io.mustelidae"
-version = "0.0.2-SNAPSHOT"
+version = "1.1.0"
 java.sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
@@ -29,10 +31,9 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     implementation("com.github.kittinunf.fuel:fuel:2.3.1") // library deprecated.
-
-    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.9.0")
 
     testImplementation("io.mockk:mockk:1.9.3")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
@@ -42,7 +43,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-web") {
         exclude(module = "spring-boot-starter-tomcat")
     }
@@ -58,6 +58,9 @@ dependencies {
     implementation("io.swagger.parser.v3:swagger-parser-v2-converter:2.1.20")
     // Java Version
     implementation("javax.xml.bind:jaxb-api:2.3.1")
+    testImplementation("com.h2database:h2")
+    runtimeOnly("mysql:mysql-connector-java:8.0.33")
+    implementation("org.mongodb:bson:4.11.1")
 }
 
 tasks.withType<Test> {
