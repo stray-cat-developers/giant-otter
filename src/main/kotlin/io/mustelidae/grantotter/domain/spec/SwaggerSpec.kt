@@ -31,6 +31,7 @@ class SwaggerSpec(
     var id: Long? = null
         private set
 
+    @Column(unique = true)
     private val specId: String = ObjectId().toString()
 
     var createdAt = LocalDateTime.now()!!
