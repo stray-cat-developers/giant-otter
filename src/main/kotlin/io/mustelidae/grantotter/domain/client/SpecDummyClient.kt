@@ -7,7 +7,7 @@ class SpecDummyClient : SpecClient {
         return true
     }
 
-    override fun getSpec(uri: URI): String {
+    override fun getSpec(uri: URI, headers: Map<String, Any>?): String {
         return """
             {
                "openapi":"3.0.1",

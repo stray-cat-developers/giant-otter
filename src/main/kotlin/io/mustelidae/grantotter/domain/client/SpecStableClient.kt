@@ -22,19 +22,22 @@ class SpecStableClient(
     SpecClient {
     override fun hasSpec(uri: URI): Boolean {
         return try {
-            this.getSpec(uri)
+            this.getSpec(uri, null)
             true
         } catch (e: Exception) {
             false
         }
     }
 
-    override fun getSpec(uri: URI): String {
-        val headers = mutableListOf<Pair<String, Any>>().apply {
+    override fun getSpec(uri: URI, headers: Map<String, Any>?): String {
+        val requestHeaders = mutableListOf<Pair<String, Any>>().apply {
             Pair("Content-Type", "application/json")
         }
+        headers?.let {
+            requestHeaders.addAll(it.toList().toMutableList())
+        }
 
-        val result = restClient.get(uri.toString(), headers)
+        val result = restClient.get(uri.toString(), requestHeaders)
             .orElseThrow()
 
         try {
