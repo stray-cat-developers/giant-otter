@@ -6,10 +6,10 @@ plugins {
     id("com.avast.gradle.docker-compose") version "0.17.6"
     id("org.jmailen.kotlinter") version "3.14.0"
     kotlin("jvm") version "1.9.21"
-    kotlin("plugin.jpa") version "1.9.22"
+    kotlin("plugin.jpa") version "1.9.21"
     kotlin("plugin.spring") version "1.9.21"
     kotlin("plugin.allopen") version "1.9.21"
-    kotlin("plugin.noarg") version "1.9.22"
+    kotlin("plugin.noarg") version "1.9.21"
 }
 
 group = "io.mustelidae"
