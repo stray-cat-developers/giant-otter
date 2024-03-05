@@ -12,12 +12,10 @@ class SwaggerSpecFinder
     private val swaggerSpecRepository: SwaggerSpecRepository,
 ) {
     fun findOne(id: ObjectId): SwaggerSpec {
-        val spec = swaggerSpecRepository.findById(id)
-        if (spec.isPresent.not()) {
-            throw DataNotFoundException("specification not found.")
-        }
+        val spec = swaggerSpecRepository.findBySpecId(id.toString())
+            ?: throw DataNotFoundException("specification not found.")
 
-        return spec.get()
+        return spec
     }
 
     fun findAll(): List<SwaggerSpec> {

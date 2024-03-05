@@ -19,7 +19,7 @@ class SwaggerSpecManager
         validate(swaggerSpec)
 
         swaggerSpecRepository.save(swaggerSpec)
-        return swaggerSpec.id
+        return swaggerSpec.getId()
     }
 
     fun remove(id: ObjectId) {

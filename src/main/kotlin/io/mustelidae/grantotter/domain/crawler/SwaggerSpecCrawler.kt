@@ -34,7 +34,7 @@ class SwaggerSpecCrawler
         val type = swaggerSpec.type
         val client = specClientHandler.client(type)
 
-        val result = client.getSpec(URI(swaggerSpec.url))
+        val result = client.getSpec(URI(swaggerSpec.url), swaggerSpec.getHeader())
 
         val convertor = SpecConvertor(type, result)
 

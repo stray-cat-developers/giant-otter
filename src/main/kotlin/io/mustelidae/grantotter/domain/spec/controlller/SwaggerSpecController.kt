@@ -57,8 +57,10 @@ class SwaggerSpecController
         request: SwaggerSpecResources.Request,
     ): Reply<String> {
         val spec = request.run {
-            SwaggerSpec(type, group, name, url, version, description, headers, tags)
+            SwaggerSpec(type, group, name, url, version, description)
         }
+
+        request.headers?.let { spec.setHeaders(it) }
 
         val id = swaggerSpecManager.add(spec)
         return id.toString().toReply()

@@ -13,7 +13,6 @@ object ResourceFixture {
             "3.0.1",
             "Grantotter Swagger Json Specification",
             mapOf("x-authentication" to "test"),
-            listOf("Platform"),
         )
     }
 
@@ -26,7 +25,6 @@ object ResourceFixture {
             "2.0",
             "Grantotter Swagger Json Specification",
             mapOf("x-authentication" to "test"),
-            listOf("Platform"),
         )
     }
 }
