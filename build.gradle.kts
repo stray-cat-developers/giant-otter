@@ -54,7 +54,7 @@ dependencies {
         exclude(group = "junit", module = "junit")
     }
     testImplementation("org.springframework.boot:spring-boot-starter-hateoas:3.2.2")
-    implementation("org.apache.httpcomponents.client5:httpclient5:5.1.4")
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.6.3")
     implementation("io.swagger.parser.v3:swagger-parser-v2-converter:2.1.20")
     // Java Version
     implementation("javax.xml.bind:jaxb-api:2.3.1")
