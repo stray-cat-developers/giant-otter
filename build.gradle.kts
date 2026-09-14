@@ -26,6 +26,20 @@ repositories {
 // so bump to a current patched release instead of leaving it stuck on an old forced version.
 ext["log4j2.version"] = "2.25.5"
 
+// Dependabot CVE cleanup (2026-09): these are all patch/minor bumps within the line Spring Boot
+// 3.2.12 already manages, so they carry the same drop-in compatibility guarantee as a normal
+// patch upgrade. Versions verified as published on Maven Central and sufficient to clear every
+// open alert for that package as of this commit; the full test suite passes against them.
+//
+// logback-core/-classic were NOT touched here even though several open alerts need >= 1.5.13:
+// logback 1.4.x's last release (1.4.14, current) is already the newest patch in that line, and
+// bumping to 1.5.x breaks Spring Boot 3.2.x's LogbackLoggingSystem at startup
+// (NoSuchMethodError: LoggerContext.getConfigurationLock(), confirmed by running the test suite
+// against 1.5.38). A real fix needs a Spring Boot minor upgrade (3.3+), not a dependency pin.
+ext["jackson-bom.version"] = "2.18.10" // was 2.15.4; fixes multiple jackson-core/-databind DoS & deserialization CVEs
+ext["tomcat.version"] = "10.1.59" // was 10.1.33; test-scope only (app runs on Undertow, see below) but fixes several critical/high tomcat CVEs
+ext["undertow.version"] = "2.3.26.Final" // was 2.3.17.Final; fixes several undertow-core HTTP request/response smuggling CVEs
+
 dependencies {
     implementation(kotlin("stdlib:1.9.25"))
     implementation(kotlin("reflect:1.9.25"))
@@ -86,6 +100,7 @@ dependencyManagement {
         dependency("com.jayway.jsonpath:json-path:2.9.0")
         dependency("org.assertj:assertj-core:3.27.7")
         dependency("org.xmlunit:xmlunit-core:2.10.0")
+        dependency("net.minidev:json-smart:2.5.2")
     }
 }
 
