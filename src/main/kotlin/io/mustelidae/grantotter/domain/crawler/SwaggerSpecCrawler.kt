@@ -50,7 +50,11 @@ class SwaggerSpecCrawler
     @Scheduled(fixedDelay = 300000) // 5분
     fun flushAndCrawlingAll() {
         SwaggerDocCacheStore.flash()
+
+        // 같은 url로 등록된 스펙이 여러 개면 가장 최근(createdAt 기준)에 등록된 것만 채택한다.
         val specs = swaggerSpecFinder.findAll()
+            .groupBy { it.url }
+            .map { (_, duplicated) -> duplicated.maxByOrNull { it.createdAt }!! }
 
         for (spec in specs) {
             try {
@@ -66,7 +70,7 @@ class SwaggerSpecCrawler
         swaggerUiConfig.urls = swaggerUrlSet.toMutableSet().apply {
             clear()
             val urls = SwaggerDocCacheStore.findAll()
-            addAll(urls.map { it.first }.sortedBy { it.name })
+            addAll(urls.map { it.first }.sortedBy { it.displayName })
         }
     }
 }
