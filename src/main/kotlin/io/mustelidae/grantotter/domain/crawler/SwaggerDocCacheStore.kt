@@ -10,8 +10,8 @@ object SwaggerDocCacheStore {
 
     fun add(swaggerSpec: SwaggerSpec, apiDefinition: String) {
         val group = swaggerSpec.group
-        val swaggerUrl = SwaggerUrl(group, "/swagger/specifications/${swaggerSpec.id}/docket", swaggerSpec.name)
-        cacheStore[swaggerSpec.id.toString()] = Pair(swaggerUrl, apiDefinition)
+        val swaggerUrl = SwaggerUrl(group, "/swagger/specifications/${swaggerSpec.getId()}/docket", swaggerSpec.name)
+        cacheStore[swaggerSpec.getId().toString()] = Pair(swaggerUrl, apiDefinition)
     }
 
     fun findOne(id: ObjectId): Pair<SwaggerUrl, String>? {
