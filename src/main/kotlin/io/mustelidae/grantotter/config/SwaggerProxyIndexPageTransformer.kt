@@ -38,7 +38,7 @@ class SwaggerProxyIndexPageTransformer(
                     const uiConfigs = window.ui.getConfigs()
                     uiConfigs.showMutatedRequest = false
                     uiConfigs.requestInterceptor = (r)=>{
-                        if(!r.url.includes(window.location.host))
+                        if(/^https?:\/\//i.test(r.url) && !r.url.includes(window.location.host))
                         r.url = window.location.protocol + "//" + window.location.host + "/swagger-proxy?url=" + encodeURIComponent(r.url) + "&method=" + (r.method || "GET") + "&headers=" + new URLSearchParams(r.headers).toString();
                         return r
                     }
