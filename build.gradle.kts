@@ -1,15 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.2.2"
+    id("org.springframework.boot") version "3.2.12"
     id("io.spring.dependency-management") version "1.1.3"
     id("com.avast.gradle.docker-compose") version "0.17.6"
     id("org.jmailen.kotlinter") version "3.14.0"
-    kotlin("jvm") version "1.9.21"
-    kotlin("plugin.jpa") version "1.9.21"
-    kotlin("plugin.spring") version "1.9.21"
-    kotlin("plugin.allopen") version "1.9.21"
-    kotlin("plugin.noarg") version "1.9.21"
+    kotlin("jvm") version "1.9.25"
+    kotlin("plugin.jpa") version "1.9.25"
+    kotlin("plugin.spring") version "1.9.25"
+    kotlin("plugin.allopen") version "1.9.25"
+    kotlin("plugin.noarg") version "1.9.25"
 }
 
 group = "io.mustelidae"
@@ -21,11 +21,14 @@ repositories {
     mavenCentral()
 }
 
-ext["log4j2.version"] = "2.17.1"
+// Pinned to 2.17.1 around the Log4Shell incident and never revisited since; the app doesn't use
+// log4j directly (log4j-api/log4j-to-slf4j only exist as a transitive logging bridge onto logback),
+// so bump to a current patched release instead of leaving it stuck on an old forced version.
+ext["log4j2.version"] = "2.25.5"
 
 dependencies {
-    implementation(kotlin("stdlib:1.9.21"))
-    implementation(kotlin("reflect:1.9.21"))
+    implementation(kotlin("stdlib:1.9.25"))
+    implementation(kotlin("reflect:1.9.25"))
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
@@ -53,14 +56,37 @@ dependencies {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
         exclude(group = "junit", module = "junit")
     }
-    testImplementation("org.springframework.boot:spring-boot-starter-hateoas:3.2.2")
-    implementation("org.apache.httpcomponents.client5:httpclient5:5.1.4")
+    testImplementation("org.springframework.boot:spring-boot-starter-hateoas:3.2.12")
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.6.4")
     implementation("io.swagger.parser.v3:swagger-parser-v2-converter:2.1.20")
     // Java Version
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     testImplementation("com.h2database:h2")
-    runtimeOnly("mysql:mysql-connector-java:8.0.33")
+    // mysql:mysql-connector-java is EOL (no patched version exists); migrated to the official successor
+    // com.mysql:mysql-connector-j, same driver class (com.mysql.cj.jdbc.Driver), version managed by the Boot BOM.
+    runtimeOnly("com.mysql:mysql-connector-j")
     implementation("org.mongodb:bson:4.11.1")
+}
+
+dependencyManagement {
+    dependencies {
+        // The Spring Boot BOM pins httpcore5 to 5.2.5, which is older than the version
+        // httpclient5:5.6.4 (declared above) actually ships against and would otherwise force
+        // it back down to. Pin explicitly to the version httpclient5 5.6.4 was built with.
+        dependency("org.apache.httpcomponents.core5:httpcore5:5.4.3")
+        dependency("org.apache.httpcomponents.core5:httpcore5-h2:5.4.3")
+
+        // Transitive dependencies pulled in by io.swagger.parser.v3:swagger-parser-v2-converter
+        // that are not version-managed by the Spring Boot BOM; pinned here to close known CVEs
+        // without touching swagger-parser itself.
+        dependency("org.apache.commons:commons-lang3:3.18.0")
+        dependency("org.mozilla:rhino:1.7.15")
+
+        // Test-only transitive dependencies pulled in by spring-boot-starter-test / spring-boot-starter-hateoas.
+        dependency("com.jayway.jsonpath:json-path:2.9.0")
+        dependency("org.assertj:assertj-core:3.27.7")
+        dependency("org.xmlunit:xmlunit-core:2.10.0")
+    }
 }
 
 tasks.withType<Test> {
