@@ -80,7 +80,7 @@ dependencyManagement {
         // that are not version-managed by the Spring Boot BOM; pinned here to close known CVEs
         // without touching swagger-parser itself.
         dependency("org.apache.commons:commons-lang3:3.18.0")
-        dependency("org.mozilla:rhino:1.7.15")
+        dependency("org.mozilla:rhino:1.7.15.1")
 
         // Test-only transitive dependencies pulled in by spring-boot-starter-test / spring-boot-starter-hateoas.
         dependency("com.jayway.jsonpath:json-path:2.9.0")
