@@ -60,8 +60,9 @@ mkdir -p logs
 LOG_FILE="logs/app.log"
 echo "애플리케이션 시작 중... ($JAR)"
 nohup java \
-    -XX:MaxMetaspaceSize=100m \
-    -Xmx512m \
+    -XX:MaxMetaspaceSize=300m \
+    -Xms512m \
+    -Xmx1024m \
     -jar "$JAR" \
     >> "$LOG_FILE" 2>&1 &
 disown

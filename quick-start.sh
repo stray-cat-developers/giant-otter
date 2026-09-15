@@ -64,6 +64,7 @@ if [ ! -f build/libs/grantotter-"$VERSION".jar ]; then
 fi
 
 java \
-	-XX:MaxMetaspaceSize=100m \
-	-Xmx512m \
+	-XX:MaxMetaspaceSize=300m \
+	-Xms512m \
+	-Xmx1024m \
 	-jar build/libs/grantotter-"$VERSION".jar
