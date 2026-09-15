@@ -9,6 +9,7 @@ import io.mustelidae.grantotter.utils.Jackson
 import org.slf4j.LoggerFactory
 import org.springdoc.core.properties.AbstractSwaggerUiConfigProperties
 import org.springdoc.core.properties.SpringDocConfigProperties
+import org.springdoc.core.properties.SwaggerUiConfigParameters
 import org.springdoc.core.properties.SwaggerUiConfigProperties
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.EnableScheduling
@@ -25,6 +26,7 @@ class SwaggerSpecCrawler
     private val swaggerDocConfigProperties: SpringDocConfigProperties,
     private val swaggerUrlSet: Set<AbstractSwaggerUiConfigProperties.SwaggerUrl>,
     private val swaggerUiConfig: SwaggerUiConfigProperties,
+    private val swaggerUiConfigParameters: SwaggerUiConfigParameters,
 ) : ClientSupport(
     Jackson.getMapper(),
     true,
@@ -67,10 +69,14 @@ class SwaggerSpecCrawler
     }
 
     fun updateOpenAPIGroup() {
-        swaggerUiConfig.urls = swaggerUrlSet.toMutableSet().apply {
+        val urls = swaggerUrlSet.toMutableSet().apply {
             clear()
-            val urls = SwaggerDocCacheStore.findAll()
-            addAll(urls.map { it.first }.sortedBy { it.displayName })
+            addAll(SwaggerDocCacheStore.findAll().map { it.first }.sortedBy { it.displayName })
         }
+        swaggerUiConfig.urls = urls
+        // swaggerUiConfig.urls를 갱신하는 것만으로는 삭제된 항목이 반영되지 않는다.
+        // springdoc이 매 요청마다 swaggerUiConfig.urls를 swaggerUiConfigParameters.urls에 병합만 하고 제거하지는 않기 때문에,
+        // 실제로 Swagger UI가 읽는 swaggerUiConfigParameters.urls도 여기서 직접 최신 상태로 교체해야 한다.
+        swaggerUiConfigParameters.urls = urls.toMutableSet()
     }
 }
