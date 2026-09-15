@@ -3,9 +3,13 @@
 # launchd에 사용자 LaunchAgent를 등록한다.
 #
 # LaunchDaemon(부팅 시 로그인 없이 실행)이 아니라 LaunchAgent(로그인 시 실행)를 쓰는 이유:
-# quick-start.sh가 띄우는 docker-compose(mysql)는 Docker Desktop이 있어야 동작하는데,
-# Docker Desktop은 GUI 앱이라 사용자가 로그인한 세션에서만 뜰 수 있다. root로 로그인 전에
-# 도는 LaunchDaemon으로 등록하면 docker 자체가 없어서 실패한다.
+# quick-start.sh가 띄우는 docker-compose(mysql)는 colima 또는 Docker Desktop이 있어야
+# 동작하는데, 둘 다 사용자가 로그인한 세션에서만 정상 동작한다(colima는 사용자 홈 디렉터리의
+# lima VM 설정을 쓰고, Docker Desktop은 GUI 앱이라 세션이 필요하다). root로 로그인 전에
+# 도는 LaunchDaemon으로 등록하면 둘 다 기동할 수 없어서 실패한다.
+# (colima는 Docker Desktop과 달리 재부팅 후 자동으로 기동되지 않고, 어느 쪽이든 기동되어도
+# docker 데몬 소켓이 뜨기까지 시간이 걸린다. quick-start.sh는 이 점을 감안해 docker-compose
+# up 전에 실제 쓰이는 백엔드를 판별해 기동을 시도하고 데몬이 준비될 때까지 대기한다.)
 #
 # 크래시 시 자동 재시작(KeepAlive)은 켜지 않았다: 이미 떠 있는 애플리케이션을 정지시키는
 # ./restart-app.sh 와 동시에 쓰면, restart-app.sh가 kill하자마자 launchd가 다시 띄워버려서
