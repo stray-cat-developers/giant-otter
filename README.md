@@ -4,6 +4,15 @@ This API application collects and shows several swagger apis.
 [![Build Status](https://github.com/stray-cat-developers/giant-otter/actions/workflows/gradle.yml/badge.svg)](https://github.com/stray-cat-developers/giant-otter)
 
 ## New Features!
+### v1.1.2
+- Accessing the host root (e.g. `http://127.0.0.1:6200/`) now redirects to `/swagger-ui/index.html`.
+- Fixed the swagger list sort key to use the display name instead of the original document URL.
+- Fixed swagger-ui listing still showing an entry after its DB record was deleted and flushed.
+- Fixed swagger specs sharing the same group being deduplicated against each other in the UI list.
+- Fixed local profile's `ddl-auto` wiping data on every app restart.
+- Added standalone restart and macOS autostart registration scripts.
+- `docker-compose up` now waits for the Docker daemon to be ready before starting.
+- Patched dependency vulnerabilities that didn't change application behavior.
 ### v1.1.1
 - Fixed a 400 error (`No enum constant ... Method.undefined`) when swagger-ui's own spec/definition-loading requests (e.g. the "Select a definition" dropdown) went through `/swagger-proxy`, since those requests carry no HTTP method.
 - Fixed a 500 error (`MalformedURLException: no protocol`) where `/swagger-proxy` incorrectly proxied same-origin, relative-path requests (like the docket endpoint below) instead of only proxying external, cross-origin spec URLs.
