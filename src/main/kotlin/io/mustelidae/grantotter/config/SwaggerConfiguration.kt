@@ -43,7 +43,7 @@ class SwaggerConfiguration {
     @Lazy
     fun apis(swaggerUiConfig: SwaggerUiConfigProperties): Set<SwaggerUrl> {
         val swaggerUrls = mutableSetOf<SwaggerUrl>()
-        swaggerUrls.addAll(SwaggerDocCacheStore.findAll().map { it.first }.sortedBy { it.name })
+        swaggerUrls.addAll(SwaggerDocCacheStore.findAll().map { it.first }.sortedBy { it.displayName })
         swaggerUiConfig.urls = swaggerUrls
         return swaggerUrls
     }
